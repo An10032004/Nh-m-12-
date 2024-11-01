@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const Chat = require('../models/chatModel')
+const { MongoMissingCredentialsError } = require('mongodb')
 const registerload = async(req,res) => {
     try {
         res.render('register')
@@ -91,6 +92,33 @@ const saveChat =async (req,res) => {
         res.status(400).send({success:false,msg:error.message})
     }
 }
+
+
+const deleteChat = async (req,res) => {
+    try {
+        await Chat.deleteOne({_id:req.body.id})
+        res.status(200).send({success:true})
+
+    } catch (error) {
+        res.status(400).send({success:false,msg:error.message})
+    }
+}
+
+const updateChat = async (req,res) => {
+    try {
+        await Chat.findByIdAndUpdate({_id:req.body.id},{
+            $set:{
+                message:req.body.message
+            }
+        }
+        )
+        res.status(200).send({success:true})
+
+    } catch (error) {
+        res.status(400).send({success:false,msg:error.message})
+    }
+}
+
 module.exports = {
     registerload,
     register,
@@ -99,4 +127,6 @@ module.exports = {
     logout,
     loadDashboard,
     saveChat,
+    deleteChat,
+    updateChat
 }
