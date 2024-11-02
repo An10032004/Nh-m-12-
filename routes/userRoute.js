@@ -32,7 +32,9 @@ const upload = multer({storage:storage})
 //route connect to userController
 const userController = require('../controllers/userController')
 const auth = require("../middlewares/auth")
-
+//cookie
+const cookieParser = require('cookie-parser')
+user_route.use(cookieParser())
 
 user_route.get('/register',auth.isLogout,userController.registerload)
 user_route.post('/register',upload.single('image'),userController.register)
@@ -45,8 +47,15 @@ user_route.get('/dashboard',auth.isLogin,userController.loadDashboard)
 
 user_route.post('/save-chat',userController.saveChat)
 
-user_route.post('/delete-chat',userController.deleteChat)
-user_route.post('/update-chat',userController.updateChat)
+user_route.delete('/delete-chat',userController.deleteChat)
+user_route.patch('/update-chat',userController.updateChat)
+
+
+user_route.get('/groups',auth.isLogin,userController.loadGroups)
+user_route.post('/groups',upload.single('image'),userController.createGroup)
+
+user_route.post('/get-members',auth.isLogin,userController.getMembers)
+
 
 user_route.get('*',function(req,res){
     res.redirect('/')

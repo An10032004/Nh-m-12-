@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const Chat = require('../models/chatModel')
+const Group = require('../models/groupModel')
 const { MongoMissingCredentialsError } = require('mongodb')
 const registerload = async(req,res) => {
     try {
@@ -48,6 +49,7 @@ const login = async(req,res) => {
         
         if(userData){
             req.session.user = userData
+            res.cookie('user',JSON.stringify(userData))
             res.redirect('/dashboard')
         }else{
             res.render('login',{message:"Email and password are incorrect"})
@@ -60,6 +62,7 @@ const login = async(req,res) => {
 
 const logout = async(req,res) => {
     try {
+        res.clearCookie('user')
         req.session.destroy()
         res.redirect('/')
     } catch (error) {
@@ -119,6 +122,45 @@ const updateChat = async (req,res) => {
     }
 }
 
+const loadGroups = async (req,res) => {
+    try {
+        const groups = await Group.find({ creator_id: req.session.user._id })
+        
+        res.render('group',{groups:groups})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+const createGroup = async (req,res) => {
+    try {
+        const group = new Group({
+            creator_id:req.session.user._id,
+            name:req.body.name,
+            image:'images/' +req.file.filename,
+            limit:req.body.limit
+        })
+        
+        await group.save()
+        const groups = await Group.find({ creator_id: req.session.user._id })
+        
+        res.render('group',{message:req.body.name + ' Group successfull created',groups:groups})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+const getMembers = async (req,res) => {
+    try {
+        
+        var users = await User.find({ _id: { $nin:req.session.user._id}})
+
+        res.status(200).send({success:true,data:users})
+
+    } catch (error) {
+        res.status(400).send({success:false,msg:error.message})
+    }
+}
 module.exports = {
     registerload,
     register,
@@ -128,5 +170,8 @@ module.exports = {
     loadDashboard,
     saveChat,
     deleteChat,
-    updateChat
+    updateChat,
+    loadGroups,
+    getMembers,
+    createGroup
 }
