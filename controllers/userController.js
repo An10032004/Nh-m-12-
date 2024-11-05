@@ -65,6 +65,8 @@ const logout = async(req,res) => {
         res.clearCookie('user')
         req.session.destroy()
         res.redirect('/')
+        res.status(200).json({success:true,msg:'Logouted'})
+
     } catch (error) {
         console.log(error.message)
     }
@@ -91,8 +93,10 @@ const saveChat =async (req,res) => {
 
         var newChat = await chat.save()
         res.status(200).send({success:true,msg:'Chat inserted!',data:newChat})
+      
     } catch (error) {
         res.status(400).send({success:false,msg:error.message})
+        
     }
 }
 
@@ -100,7 +104,8 @@ const saveChat =async (req,res) => {
 const deleteChat = async (req,res) => {
     try {
         await Chat.deleteOne({_id:req.body.id})
-        res.status(200).send({success:true})
+        res.status(200).json({success:true})
+        
 
     } catch (error) {
         res.status(400).send({success:false,msg:error.message})
@@ -109,16 +114,19 @@ const deleteChat = async (req,res) => {
 
 const updateChat = async (req,res) => {
     try {
+       
+
         await Chat.findByIdAndUpdate({_id:req.body.id},{
             $set:{
                 message:req.body.message
             }
         }
         )
-        res.status(200).send({success:true})
-
+       
+        res.status(200).json({success:true})
+       
     } catch (error) {
-        res.status(400).send({success:false,msg:error.message})
+        res.status(400).json({success:false,msg:error.message})
     }
 }
 
@@ -127,6 +135,7 @@ const loadGroups = async (req,res) => {
         const groups = await Group.find({ creator_id: req.session.user._id })
         
         res.render('group',{groups:groups})
+        res.json(groups)
     } catch (error) {
         console.log(error.message)
     }
@@ -161,6 +170,27 @@ const getMembers = async (req,res) => {
         res.status(400).send({success:false,msg:error.message})
     }
 }
+
+const getApi = async (req,res) =>{
+    const user = await User.find({
+        is_online:'0'
+    })
+    res.json(user)
+}
+const editApi = async (req,res) =>{
+        const id = "672628466f20caa2d3e2606d"
+    try {
+        await User.updateOne({
+            _id:id
+        },
+        {is_online:"1"}
+    )
+        res.status(200).json({success:true})
+    } catch (error) {
+        res.status(400).json({success:false,msg:error.message})
+    }
+}
+
 module.exports = {
     registerload,
     register,
@@ -173,5 +203,7 @@ module.exports = {
     updateChat,
     loadGroups,
     getMembers,
-    createGroup
+    createGroup,
+    getApi,
+    editApi
 }

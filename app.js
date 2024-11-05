@@ -3,7 +3,7 @@ require('dotenv').config()
 var mongoose = require('mongoose')
 
 mongoose.connect('mongodb://127.0.0.1:27017/dynamic-chat-app')
-
+// mongodb+srv://sa:sa123@cluster0.t2afm.mongodb.net/dynamic-chat-app
 
 const app = require('express')()
 
@@ -14,7 +14,8 @@ const Chat = require('./models/chatModel')
 
 const userRoute = require("./routes/userRoute")
 app.use('/',userRoute)
-
+const adminRoute = require("./routes/adminRoute")
+app.use('/',adminRoute)
 const io = require('socket.io')(http)
  
 var usp = io.of('/user-namespace')
@@ -63,6 +64,6 @@ usp.on('connection',async function(socket){
 
 })
 
-http.listen(3001,function(){
+http.listen(3000,function(){
     console.log('server is running')
 })

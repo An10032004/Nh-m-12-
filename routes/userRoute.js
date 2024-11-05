@@ -57,8 +57,10 @@ user_route.post('/groups',upload.single('image'),userController.createGroup)
 user_route.post('/get-members',auth.isLogin,userController.getMembers)
 
 
-user_route.get('*',function(req,res){
-    res.redirect('/')
-})
+
+//api check PostMan
+user_route.get('/testApi',userController.getApi)
+user_route.patch('/updateApi',userController.editApi)
+
 
 module.exports = user_route

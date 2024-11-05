@@ -1,0 +1,151 @@
+const Account = require("../models/admin/adminModel")
+const Role = require("../models/admin/roleModel")
+const md5 = require('md5');
+module.exports.dashboard = async (req, res) => {
+
+
+   res.render("admin/pages/dashboard/index.pug", {
+      pageTitle: "trang tổng quan",
+   })
+}
+
+module.exports.indexAccount = async (req, res) => {
+   let find = {
+       deleted: false
+   };
+
+   const records = await Account.find(find).select("-password -token")
+
+   for (const record of records){
+      const role = await Role.findOne({
+        deleted: false,
+        _id: record.role_id
+      })
+      record.role = role.title
+    }
+
+   res.render("admin/pages/accounts/index", {
+       pageTitle: "Danh sách tài khoản",
+       records: records
+   });
+}
+
+module.exports.createAccount = async (req, res) => {
+   const roles = await Role.find({
+      deleted: false
+    })
+   res.render("admin/pages/accounts/create", {
+       pageTitle: "Tạo tài khoản mới",
+       roles: roles
+   });
+}
+
+
+// [POST] /admin/accounts/create
+module.exports.createPostAccount = async (req, res) => {
+   const emailExist = await Account.findOne({
+       email: req.body.email,
+       deleted: false
+   })
+
+   if(emailExist) {
+       req.flash("error", `Email ${req.body.email} đã tồn tại`)
+       res.redirect("back")
+   }
+   else {
+      req.body.password = md5(req.body.password)
+   
+   const record = new Account(req.body)
+   await record.save();
+
+   res.redirect(`/ad/accounts`);
+   }
+   
+
+ }
+
+ module.exports.indexRole = async (req, res) => {
+
+   let find = {
+     deleted: false
+   }
+    const records = await Role.find(find);
+     res.render("admin/pages/roles/index.pug", {
+        pageTitle: "Nhóm quyền",
+        records: records
+     })
+   }
+   
+   module.exports.createRole = async (req, res) => {
+
+      res.render("admin/pages/roles/create", {
+         pageTitle: "Tạo nhóm quyền",
+       
+      })
+    }
+    
+    //[post]  /admin/roles/create
+    module.exports.createPostRole = async (req, res) => {
+    
+    const record = new Role(req.body)
+    await record.save();
+    res.redirect(`/ad/roles`)
+    }
+
+    module.exports.permissions = async (req, res) => {
+      let find = {
+        deleted: false
+      }
+      const records = await Role.find(find);
+      res.render("admin/pages/roles/permissions", {
+        pageTitle: "Phân quyền",
+        records : records
+      })
+      }
+
+      module.exports.login = (req, res) => {
+         if(req.cookies.token){
+           res.redirect(`/ad/dashboard`)
+         }
+         else {
+       res.render("admin/pages/auth/login.pug", {
+            pageTitle: "Trang đăng nhập"
+         })
+         }
+       }
+
+      module.exports.loginPost = async (req, res) => {
+        const email = req.body.email;
+        const password = req.body.password;
+        const user = await Account.findOne({
+        email: email,
+        deleted: false
+        })
+      if (!user) {
+        req.flash("error", `Email ${email} không tồn tại`)
+        res.redirect("back");
+        return;
+      }
+      if (md5(password) != user.password){
+        req.flash("error", "Sai mật khẩu!");
+        res.redirect("back")
+        return;
+      }
+      
+      if (user.status == "inactive"){
+        req.flash("error", "tài khoản của bạn đã bị khóa");
+        res.redirect("back")
+        return;
+      }
+
+      res.cookie("token", user.token);
+        res.redirect(`/ad/dashboard`)
+      }
+
+      module.exports.logout = (req, res) => {
+        res.clearCookie("token");
+       res.redirect(`/ad/login`);
+      }
+      
+       
+ 

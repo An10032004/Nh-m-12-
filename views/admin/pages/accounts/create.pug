@@ -1,0 +1,46 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert
+
+block main 
+    +alert-error(3000)
+    h1(class="mb-4") Thêm mới sản phẩm
+
+    form(action=`/ad/accounts/create` method="POST" enctype="multipart/form-data")
+      div(class="form-group")
+        label(for="fullName") Họ tên *
+        input(type="text" id="fullName" name="fullName" class="form-control" required)
+
+      div(class="form-group")
+        label(for="email") Email *
+        input(type="email" id="email" name="email" class="form-control" required)
+
+      div(class="form-group")
+        label(for="password") Mật Khẩu *
+        input(type="password" id="password" name="password" class="form-control" required)
+
+      div(class="form-group")
+        label(for="phone") Số điện thoại
+        input(type="text" id="phone" name="phone" class="form-control")
+
+      div(class="form-group" upload-image)
+        label(for="avatar") Avatar
+        input(type="file" id="avatar" name="avatar" accept="image/*" class="form-control-file" upload-image-input)
+        img(src="" class="image-preview" upload-image-preview)
+
+      div(class="form-group")
+        label(for="role_id") Phân quyền
+        select(name="role_id" id="role_id" class="form-control")
+          option(disabled) -- Chọn --
+          each item in roles
+            option(value=item.id) #{item.title}
+
+      div(class="form-group form-check form-check-inline")
+        input(type="radio" id="statusActive" name="status" value="active" class="form-check-input" checked)
+        label(for="statusActive" class="form-check-label") Hoạt động
+
+      div(class="form-group form-check form-check-inline")
+        input(type="radio" id="statusInActive" name="status" value="inactive" class="form-check-input")
+        label(for="statusInActive" class="form-check-label") Dừng hoạt động
+
+      div(class="form-group")
+        button(type="submit" class="btn btn-primary") Tạo mới

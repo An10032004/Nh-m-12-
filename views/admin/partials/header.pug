@@ -1,0 +1,21 @@
+header.header 
+  .container-fluid 
+    .row.align-items-center
+      .col-3 
+        .inner-logo
+          a(href="admin/dashboard") ADMIN 
+      .col-9
+        div(class="text-right")
+          a(
+            href=`#`
+            class="btn btn-primary btn-sm mr-2"
+          ) #{user.fullName}
+          a(
+            href=`/`
+            class="btn btn-primary btn-sm mr-2"
+          ) Sang Trang Client
+          a(
+            href=`/ad/logout`
+            class="btn btn-danger btn-sm"
+          ) Đăng xuất
+          

@@ -1,0 +1,31 @@
+extend ../../layouts/default.pug
+
+block main
+  h1 #{pageTitle}
+
+  .row-mt-4 
+    .col-4
+      .card.mb-4 
+        .card-header thông tin tài khoản 
+        .card-body 
+            p Họ Tên: 
+            p Email: 
+            p Số điện thoại: 
+            p Phân quyền: 
+            
+
+    .col-4
+      .card.mb-4
+        .card-header Tài khoản admin 
+        .card-body
+          p số lượng: <b>5</b>
+          p Hoạt động: <b>3</b>
+          p Dừng hoạt động: <b>2</b>
+
+    .col-4
+      .card.mb-4
+        .card-header Tài khoản client 
+        .card-body
+          p số lượng: <b>5</b>
+          p Hoạt động: <b>3</b>
+          p Dừng hoạt động: <b>2</b>
