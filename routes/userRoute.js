@@ -57,6 +57,10 @@ user_route.post('/groups',upload.single('image'),userController.createGroup)
 user_route.post('/get-members',auth.isLogin,userController.getMembers)
 
 
+user_route.get('/search', auth.isLogin, userController.loadSearch);
+user_route.post('/search', userController.searchName);  
+
+
 user_route.get('*',function(req,res){
     res.redirect('/')
 })

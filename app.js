@@ -2,8 +2,9 @@ require('dotenv').config()
 
 var mongoose = require('mongoose')
 
-mongoose.connect('mongodb://127.0.0.1:27017/dynamic-chat-app')
-
+mongoose.connect('mongodb+srv://sa:sa123@cluster0.t2afm.mongodb.net/dynamic-chat-app')
+//mongodb+srv://sa:sa123@cluster0.t2afm.mongodb.net/dynamic-chat-app
+//mongodb://127.0.0.1:27017/dynamic-chat-app
 
 const app = require('express')()
 
@@ -62,6 +63,7 @@ usp.on('connection',async function(socket){
     })
 
 })
+
 
 http.listen(3001,function(){
     console.log('server is running')

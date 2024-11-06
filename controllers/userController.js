@@ -100,10 +100,10 @@ const saveChat =async (req,res) => {
 const deleteChat = async (req,res) => {
     try {
         await Chat.deleteOne({_id:req.body.id})
-        res.status(200).send({success:true})
+        res.status(200).json({success:true})
 
     } catch (error) {
-        res.status(400).send({success:false,msg:error.message})
+        res.status(400).json({success:false,msg:error.message})
     }
 }
 
@@ -115,10 +115,10 @@ const updateChat = async (req,res) => {
             }
         }
         )
-        res.status(200).send({success:true})
+        res.status(200).json({success:true})
 
     } catch (error) {
-        res.status(400).send({success:false,msg:error.message})
+        res.status(400).json({success:false,msg:error.message})
     }
 }
 
@@ -161,6 +161,27 @@ const getMembers = async (req,res) => {
         res.status(400).send({success:false,msg:error.message})
     }
 }
+
+const loadSearch = async (req, res) => {
+    try {
+        res.render('search');
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+const searchName = async (req, res) => {
+    try {
+        const keyword = req.body.name;
+        const users = await User.find({
+            name: { $regex: keyword, $options: 'i' }, 
+        });
+        res.render('search', { users }); 
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     registerload,
     register,
@@ -173,5 +194,7 @@ module.exports = {
     updateChat,
     loadGroups,
     getMembers,
-    createGroup
+    createGroup,
+    loadSearch,
+    searchName
 }
