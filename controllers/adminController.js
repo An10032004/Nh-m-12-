@@ -1,11 +1,15 @@
 const Account = require("../models/admin/adminModel")
 const Role = require("../models/admin/roleModel")
+const User = require("../models/userModel")
 const md5 = require('md5');
 module.exports.dashboard = async (req, res) => {
-
-
+  const users = await User.find({
+    deleted:false
+  })
+  console.log(users)
    res.render("admin/pages/dashboard/index.pug", {
       pageTitle: "trang tổng quan",
+      users:users
    })
 }
 
@@ -146,6 +150,30 @@ module.exports.createPostAccount = async (req, res) => {
         res.clearCookie("token");
        res.redirect(`/ad/login`);
       }
+
+
+      module.exports.permissionsPatch= async (req, res) => { 
+        const permissions = JSON.parse(req.body.permissions)
+    
+        for (const item of permissions) {
+            await Role.updateOne({_id: item.id},{permissions:item.permissions})
+        }
+        req.flash("success","cap nhat thanh cong")
+    
+        res.redirect("back")
+    }
       
+
+
+
+    module.exports.Post = async (req, res) => {
+      const users = await User.find({
+        deleted:false
+      })
+       res.render("admin/pages/posts/index.pug", {
+          pageTitle: "trang tổng quan",
+          users:users
+       })
+    }
        
  

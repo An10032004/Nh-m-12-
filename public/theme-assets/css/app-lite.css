@@ -1,0 +1,40 @@
+@import url('bootstrap-extended.css');
+@import url('colors.css');
+@import url('components-lite.css');
+
+.main-menu.menu-collapsed {
+    width: 0;
+    visibility: hidden;
+  }
+
+.btn#sidebarCollapse {
+    z-index: 9999; /* Đảm bảo nút bấm ở trên cùng */
+    position: relative; /* Đảm bảo nút bấm không bị chồng chéo */
+    margin-top: 6px;
+  }
+
+
+  .app-content.menu-open {
+    margin-left: 250px; /* Thay đổi theo chiều rộng của menu */
+  }
+  
+  /* Định dạng cho menu */
+  .main-menu {
+    width: 250px; /* Chiều rộng của menu */
+    /* Các kiểu khác của menu */
+  }
+
+  .header-collapsed{
+    margin-left: 250px;
+  }
+
+.green{
+  color:rgb(79, 201, 79);
+}
+
+.grey{
+  color:rgb(84, 75, 75)
+}
+
+
+

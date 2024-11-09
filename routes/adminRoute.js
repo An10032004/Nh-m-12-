@@ -57,10 +57,14 @@ admin_route.get("/ad/roles/create",authMiddleware.requireAuth,adminController.cr
 admin_route.post("/ad/roles/create",adminController.createPostRole)
 
 admin_route.get("/ad/roles/permissions",authMiddleware.requireAuth,adminController.permissions)
+admin_route.patch("/ad/roles/permissions",authMiddleware.requireAuth,adminController.permissionsPatch)
 
 admin_route.get("/ad/login",adminController.login)
 
 admin_route.post('/ad/login',  adminController.loginPost)
 admin_route.get('/ad/logout', adminController.logout)
+
+
+admin_route.get('/ad/posts',authMiddleware.requireAuth, adminController.Post)
 
 module.exports = admin_route

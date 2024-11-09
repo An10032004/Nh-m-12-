@@ -1,9 +1,10 @@
-extends ../../layouts/default.pug
+extends ../../layouts/default2.pug
 include ../../mixins/alert
 
-block main 
+block main
+  .app-content 
     +alert-error(3000)
-    h1(class="mb-4") Thêm mới sản phẩm
+    h1(class="mb-4") Thêm mới 
 
     form(action=`/ad/accounts/create` method="POST" enctype="multipart/form-data")
       div(class="form-group")
@@ -44,3 +45,18 @@ block main
 
       div(class="form-group")
         button(type="submit" class="btn btn-primary") Tạo mới
+
+  
+  // BEGIN VENDOR JS
+  script(src='/theme-assets/vendors/js/vendors.min.js' type='text/javascript')
+  // BEGIN VENDOR JS
+  // BEGIN PAGE VENDOR JS
+  script(src='/theme-assets/vendors/js/charts/chartist.min.js' type='text/javascript')
+  // END PAGE VENDOR JS
+  // BEGIN CHAMELEON  JS
+  script(src='/theme-assets/js/core/app-menu-lite.js' type='text/javascript')
+  script(src='/theme-assets/js/core/app-lite.js' type='text/javascript')
+  // END CHAMELEON  JS
+  // BEGIN PAGE LEVEL JS
+  script(src='/theme-assets/js/scripts/pages/dashboard-lite.js' type='text/javascript')
+  // END PAGE LEVEL JS

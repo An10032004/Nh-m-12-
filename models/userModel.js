@@ -20,7 +20,11 @@ const userSchema = new mongoose.Schema({
     is_online:{
         type:String,
         default:'0'
-    }
+    },
+    deleted: {
+        type: Boolean,
+        default: false
+      },
 },
     {timestamps:true}
 )

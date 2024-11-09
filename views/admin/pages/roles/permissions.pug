@@ -1,114 +1,130 @@
-extends ../../layouts/default.pug
+extends ../../layouts/default2.pug
 include ../../mixins/alert
 block main
+  .app-content
+    if(role.permissions.includes("roles_permissions"))
+      h1(class="mb-4") Phân quyền 
+      +alert-error(3000)
+      +alert-success(3000)
 
-    h1(class="mb-4") Phân quyền 
-    +alert-error(3000)
-    +alert-success(3000)
-
-    if (records)
-      div(data-records=records)
+      if (records)
+        div(data-records=records)
 
 
-    div(class="text-right")
-      button(
-        type="submit"
-        class="btn btn-primary mb-3"
-        button-submit 
-      ) Cập nhật 
-    table(
-      class="table table hover table-sm"
-      table-permissions
-    )
-      thead 
-        tr 
-          th tính năng 
-          each item in records 
-            th(class="text-center") #{item.title} 
+      div(class="text-right")
+        button(
+          type="submit"
+          class="btn btn-primary mb-3"
+          button-submit 
+        ) Cập nhật 
+      table(
+        class="table table hover table-sm"
+        table-permissions
+      )
+        thead 
+          tr 
+            th tính năng 
+            each item in records 
+              th(class="text-center") #{item.title} 
 
-      
-      tbody
-        tr(data-name="id" class="d-none")
-          td 
-          each item in records 
-            td(class="text-center")
-              input(type="text" value=item.id)
         
+        tbody
+          tr(data-name="id" class="d-none")
+            td 
+            each item in records 
+              td(class="text-center")
+                input(type="text" value=item.id)
+          
 
-        //- nhóm quyền
-        tr
-          td(colspan="4")
-            b Nhóm quyền 
-        tr(data-name="roles_view")
-          td Xem
-          each item in records
-            td(class="text-center")
-              input(type="checkbox") 
-            
-        tr(data-name="roles_create")
-          td Thêm mới 
-          each item in records
-            td(class="text-center")
-              input(type="checkbox") 
-            
-        tr(data-name="roles_edit")
-          td Chỉnh sửa
-          each item in records
-            td(class="text-center")
-              input(type="checkbox") 
-            
-        tr(data-name="roles_delete")
-          td Xóa 
-          each item in records
-            td(class="text-center")
-              input(type="checkbox") 
+          //- nhóm quyền
+          tr
+            td(colspan="4")
+              b Nhóm quyền 
+          tr(data-name="roles_view")
+            td Xem
+            each item in records
+              td(class="text-center")
+                input(type="checkbox") 
+              
+          tr(data-name="roles_create")
+            td Thêm mới 
+            each item in records
+              td(class="text-center")
+                input(type="checkbox") 
+              
+          tr(data-name="roles_edit")
+            td Chỉnh sửa
+            each item in records
+              td(class="text-center")
+                input(type="checkbox") 
+              
+          tr(data-name="roles_delete")
+            td Xóa 
+            each item in records
+              td(class="text-center")
+                input(type="checkbox") 
 
-        tr(data-name="roles_permissions")
-          td Phân quyền
-          each item in records
-            td(class="text-center")
-              input(type="checkbox") 
+          tr(data-name="roles_permissions")
+            td Phân quyền
+            each item in records
+              td(class="text-center")
+                input(type="checkbox") 
 
-        //- Danh sách tài khoản
-        tr
-          td(colspan="4")
-            b Danh sách tài khoản 
-        tr(data-name="accounts_view")
-          td Xem
-          each item in records
-            td(class="text-center")
-              input(type="checkbox") 
-            
-        tr(data-name="accounts_create")
-          td Thêm mới 
-          each item in records
-            td(class="text-center")
-              input(type="checkbox") 
-            
-        tr(data-name="accounts_edit")
-          td Chỉnh sửa
-          each item in records
-            td(class="text-center")
-              input(type="checkbox") 
-            
-        tr(data-name="accounts_delete")
-          td Xóa 
-          each item in records
-            td(class="text-center")
-              input(type="checkbox")
-    form(
-      class="d-none"
-      action=`${prefixAdmin}/roles/permissions?_method=PATCH`
-      method="POST" 
-      id="form-change-permissions"
-      ) 
-        div(class="form-group")
-          input(
-            type="text"
-            class="form-control"
-            name="permissions"
-          )
+          //- Danh sách tài khoản
+          tr
+            td(colspan="4")
+              b Danh sách tài khoản 
+          tr(data-name="accounts_view")
+            td Xem
+            each item in records
+              td(class="text-center")
+                input(type="checkbox") 
+              
+          tr(data-name="accounts_create")
+            td Thêm mới 
+            each item in records
+              td(class="text-center")
+                input(type="checkbox") 
+              
+          tr(data-name="accounts_edit")
+            td Chỉnh sửa
+            each item in records
+              td(class="text-center")
+                input(type="checkbox") 
+              
+          tr(data-name="accounts_delete")
+            td Xóa 
+            each item in records
+              td(class="text-center")
+                input(type="checkbox")
+      form(
+        class="d-none"
+        action=`/ad/roles/permissions?_method=PATCH`
+        method="POST" 
+        id="form-change-permissions"
+        ) 
+          div(class="form-group")
+            input(
+              type="text"
+              class="form-control"
+              name="permissions"
+            )
+    else 
+      | You are not in permissions
     script(src="/admin/js/roles.js") 
+  // BEGIN VENDOR JS
+  script(src='/theme-assets/vendors/js/vendors.min.js' type='text/javascript')
+  // BEGIN VENDOR JS
+  // BEGIN PAGE VENDOR JS
+  script(src='/theme-assets/vendors/js/charts/chartist.min.js' type='text/javascript')
+  // END PAGE VENDOR JS
+  // BEGIN CHAMELEON  JS
+  script(src='/theme-assets/js/core/app-menu-lite.js' type='text/javascript')
+  script(src='/theme-assets/js/core/app-lite.js' type='text/javascript')
+  // END CHAMELEON  JS
+  // BEGIN PAGE LEVEL JS
+  script(src='/theme-assets/js/scripts/pages/dashboard-lite.js' type='text/javascript')
+  // END PAGE LEVEL JS
          
 
         
