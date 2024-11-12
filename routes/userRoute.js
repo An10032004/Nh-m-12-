@@ -58,6 +58,12 @@ user_route.post('/get-members',auth.isLogin,userController.getMembers)
 
 
 
+user_route.get('/posts',auth.isLogin,userController.getPost)
+user_route.get('/create-post',auth.isLogin,userController.loadPost)
+user_route.post('/create-post',auth.isLogin,userController.submitPost)
+
+
+
 //api check PostMan
 user_route.get('/testApi',userController.getApi)
 user_route.patch('/updateApi',userController.editApi)

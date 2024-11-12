@@ -2,7 +2,9 @@ const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const Chat = require('../models/chatModel')
 const Group = require('../models/groupModel')
+const Post = require('../models/postModel')
 const { MongoMissingCredentialsError } = require('mongodb')
+const { post } = require('../routes/userRoute')
 const registerload = async(req,res) => {
     try {
         res.render('register')
@@ -191,6 +193,50 @@ const editApi = async (req,res) =>{
     }
 }
 
+
+const getPost = async (req,res) => {
+
+    const posts = await Post.find({})
+
+
+
+    res.render('post',{posts:posts})
+}
+
+const loadPost = async (req,res) => {
+    res.render('createPost')
+}
+
+const submitPost = async (req,res) => {
+    const title = req.body.title
+    const content = req.body.content 
+    const popular = req.body.popular  
+    const users = await User.find({})
+    
+    var name
+    for(const user of users){
+        if(user._id == req.session.user._id){
+            name = user.name
+        }
+        
+    }
+    const post = new Post({
+        userName:name,
+        user_id_upload:req.session.user._id,
+        title:title,
+        content:content,
+        popular:popular
+    })
+    
+   
+    
+   
+     const postData =  await post.save()
+
+    res.render('createPost',{message:'Post added'})
+}
+
+
 module.exports = {
     registerload,
     register,
@@ -205,5 +251,8 @@ module.exports = {
     getMembers,
     createGroup,
     getApi,
-    editApi
+    editApi,
+    getPost,
+    loadPost,
+    submitPost,
 }

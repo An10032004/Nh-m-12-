@@ -178,8 +178,10 @@ module.exports.createPostAccount = async (req, res) => {
 
     module.exports.Chart = async (req, res) => {
       const users = await User.find({
-        deleted:false
+        deleted:false,
       })
+
+      
        res.render("admin/pages/charts/chart.pug", {
           pageTitle: "Chart",
           users:users

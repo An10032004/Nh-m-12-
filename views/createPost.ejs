@@ -1,0 +1,29 @@
+<%-include('layouts/header.ejs') %>
+
+
+<form action="/create-post" method="post">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" required><br><br>
+
+    <label for="content">Content:</label><br>
+    <textarea id="content" name="content" rows="5" required></textarea><br><br>
+
+    <label>Is this post popular?</label><br>
+    <input type="radio" id="popular-yes" name="popular" value="true" checked>
+    <label for="popular-yes">Yes</label><br>
+    <input type="radio" id="popular-no" name="popular" value="false">
+    <label for="popular-no">No</label><br><br>
+
+    <button type="submit">Submit</button>
+</form>
+
+    <% 
+        if(typeof message !== 'undefined'){
+            %>
+                <p style="color: green;"> <%= message %></p>
+            <%
+        }
+    %>
+
+
+<%-include('layouts/footer.ejs') %>
