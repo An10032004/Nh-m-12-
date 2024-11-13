@@ -196,7 +196,7 @@ const editApi = async (req,res) =>{
 
 const getPost = async (req,res) => {
 
-    const posts = await Post.find({})
+    const posts = await Post.find({}).sort({DateAt:-1}).limit(4)
 
 
 
@@ -213,6 +213,8 @@ const submitPost = async (req,res) => {
     const popular = req.body.popular  
     const users = await User.find({})
     
+
+
     var name
     for(const user of users){
         if(user._id == req.session.user._id){
@@ -225,7 +227,9 @@ const submitPost = async (req,res) => {
         user_id_upload:req.session.user._id,
         title:title,
         content:content,
-        popular:popular
+        popular:popular,
+        image:'images/' + req.file.filename,
+        DateAt:new Date()
     })
     
    
@@ -235,6 +239,7 @@ const submitPost = async (req,res) => {
 
     res.render('createPost',{message:'Post added'})
 }
+
 
 
 module.exports = {
@@ -255,4 +260,5 @@ module.exports = {
     getPost,
     loadPost,
     submitPost,
+   
 }

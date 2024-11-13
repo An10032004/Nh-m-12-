@@ -2,13 +2,16 @@ require('dotenv').config()
 
 var mongoose = require('mongoose')
 
+
 mongoose.connect('mongodb://127.0.0.1:27017/dynamic-chat-app')
 // mongodb+srv://sa:sa123@cluster0.t2afm.mongodb.net/dynamic-chat-app
 
 const app = require('express')()
 
 const http = require('http').Server(app)
+const moment = require('moment')
 
+app.locals.moment = moment
 const User = require('./models/userModel')
 const Chat = require('./models/chatModel')
 

@@ -11,7 +11,9 @@ admin_route.use(methodOverride("_method"));
 admin_route.set('view engine','pug')
 admin_route.set('views','./views')
 
+const moment = require('moment')
 
+admin_route.locals.moment = moment
 
 admin_route.use(express.static('public'))
 

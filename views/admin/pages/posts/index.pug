@@ -11,7 +11,7 @@ block main
               .breadcrumb-wrapper.mr-1
                 ol.breadcrumb
                   li.breadcrumb-item
-                    a(href='index.html') Home
+                    a(href='/ad/dashboard') Home
                   li.breadcrumb-item.active
                     |Posts
         .content-body
@@ -19,53 +19,55 @@ block main
           // Header footer section start
           section#header-footer
             .row.match-height
-              .col-lg-4.col-md-12
-                .card
-                  .card-body
-                    h4.card-title Newest posts
-                    h6.card-subtitle.text-muted Basic Card With Header &amp; Footer
-                  img(src='/theme-assets/images/carousel/22.jpg' alt='Card image cap')
-                  .card-body
-                    p.card-text
-                      | Some quick example text to build on the card title and make up the bulk of the card&apos;s content.
-                    a.card-link(href='#') Card link
-                    a.card-link(href='#') Another link
-                  .card-footer.border-top-blue-grey.border-top-lighten-5.text-muted
-                    span.float-left 3 hours ago
-                    span.float-right
-                      a.card-link(href='#')
-                        | Read More
-                        i.la.la-angle-right
-              .col-lg-4.col-md-12
-                .card
-                  .card-body
-                    h4.card-title Newest posts
-                    h6.card-subtitle.text-muted Newest posts With Header &amp; Footer
-                  img(src='/theme-assets/images/carousel/23.jpg' alt='Card image cap')
-                  .card-body
-                    p.card-text
-                      | Some quick example text to build on the card title and make up the bulk of the card&apos;s content.
-                    a.card-link(href='#') Card link
-                    a.card-link(href='#') Another link
-                  .card-footer.border-top-blue-grey.border-top-lighten-5.text-muted
-                    span.float-left 1 day ago
-              .col-lg-4.col-md-12
-                .card
-                  .card-body
-                    h4.card-title Newest posts
-                    h6.card-subtitle.text-muted Basic Card With Header &amp; Footer
-                  img(src='/theme-assets/images/carousel/24.jpg' alt='Card image cap')
-                  .card-body
-                    p.card-text
-                      | Some quick example text to build on the card title and make up the bulk of the card&apos;s content.
-                    a.card-link(href='#') Card link
-                    a.card-link(href='#') Another link
-                  .card-footer.border-top-blue-grey.border-top-lighten-5.text-muted
-                    span.float-left 3 hours ago
-                    span.float-right
-                      a.card-link(href='#')
-                        | Read More
-                        i.la.la-angle-right
+              each item in posts
+                .col-lg-4.col-md-12
+                  .card
+                    .card-body
+                      h4.card-title Newest posts
+                      h6.card-subtitle.text-muted #{item.title }
+                      h6.card-subtitle.text-muted uploaded by #{item.userName}
+                    img(src='/' +item.image alt='Card image cap')
+                    .card-body
+                      p.card-text
+                        | #{item.content}
+                      a.card-link(href='#') Card link
+                      a.card-link(href='#') Another link
+                    .card-footer.border-top-blue-grey.border-top-lighten-5.text-muted
+                      span.float-left #{moment(item.DateAt).fromNow()}
+                      span.float-right
+                        a.card-link(href='#')
+                          | Read More
+                          i.la.la-angle-right
+              //- .col-lg-4.col-md-12
+              //-   .card
+              //-     .card-body
+              //-       h4.card-title Newest posts
+              //-       h6.card-subtitle.text-muted Newest posts With Header &amp; Footer
+              //-     img(src='/theme-assets/images/carousel/23.jpg' alt='Card image cap')
+              //-     .card-body
+              //-       p.card-text
+              //-         | Some quick example text to build on the card title and make up the bulk of the card&apos;s content.
+              //-       a.card-link(href='#') Card link
+              //-       a.card-link(href='#') Another link
+              //-     .card-footer.border-top-blue-grey.border-top-lighten-5.text-muted
+              //-       span.float-left 1 day ago
+              //- .col-lg-4.col-md-12
+              //-   .card
+              //-     .card-body
+              //-       h4.card-title Newest posts
+              //-       h6.card-subtitle.text-muted Basic Card With Header &amp; Footer
+              //-     img(src='/theme-assets/images/carousel/24.jpg' alt='Card image cap')
+              //-     .card-body
+              //-       p.card-text
+              //-         | Some quick example text to build on the card title and make up the bulk of the card&apos;s content.
+              //-       a.card-link(href='#') Card link
+              //-       a.card-link(href='#') Another link
+              //-     .card-footer.border-top-blue-grey.border-top-lighten-5.text-muted
+              //-       span.float-left 3 hours ago
+              //-       span.float-right
+              //-         a.card-link(href='#')
+              //-           | Read More
+              //-           i.la.la-angle-right
           // Header footer section End
           // Content types section start
           section#content-types

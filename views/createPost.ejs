@@ -1,12 +1,20 @@
 <%-include('layouts/header.ejs') %>
 
 
-<form action="/create-post" method="post">
+<form action="/create-post" method="post" enctype="multipart/form-data">
     <label for="title">Title:</label><br>
     <input type="text" id="title" name="title" required><br><br>
-
+    
     <label for="content">Content:</label><br>
-    <textarea id="content" name="content" rows="5" required></textarea><br><br>
+    <textarea id="content" name="content" rows="5" style="padding:100px" required></textarea><br><br>
+
+    
+
+      <input type="file" name="image" id="image">
+          
+
+    <br> 
+
 
     <label>Is this post popular?</label><br>
     <input type="radio" id="popular-yes" name="popular" value="true" checked>
@@ -25,5 +33,6 @@
         }
     %>
 
+   
 
 <%-include('layouts/footer.ejs') %>

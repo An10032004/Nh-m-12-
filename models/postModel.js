@@ -10,12 +10,16 @@ const postSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    
+    image:{
+        type:String,
+        required:true
+    },
     content:{
         type:String,
         required:true
     },
-    popular:String
+    popular:String,
+    DateAt: { type: Date, default: Date.now }
 
 },
     {timestamps:true}

@@ -2,7 +2,9 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const user_route = express()
+const moment = require('moment')
 
+user_route.locals.moment = moment
 user_route.use(bodyParser.json())
 user_route.use(bodyParser.urlencoded({extended:true}))
 
@@ -60,7 +62,10 @@ user_route.post('/get-members',auth.isLogin,userController.getMembers)
 
 user_route.get('/posts',auth.isLogin,userController.getPost)
 user_route.get('/create-post',auth.isLogin,userController.loadPost)
-user_route.post('/create-post',auth.isLogin,userController.submitPost)
+user_route.post('/create-post',upload.single('image'),auth.isLogin,userController.submitPost)
+
+
+
 
 
 

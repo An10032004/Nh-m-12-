@@ -93,7 +93,7 @@
 						for(let i = 0 ; i < posts.length;i++){
 							%>
 							<div class="fix single_content floatleft">
-							<img src="images/home_featured.png" alt=""/>
+							<img src='<%= posts[i]['image'] %>' alt=""/>
 							<div class="fix single_content_info">
 								<h1><%= posts[i]['title'] %></h1>
 								<p class="author"><%= posts[i]['content'] %></p>

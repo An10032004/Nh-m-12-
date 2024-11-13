@@ -1,6 +1,7 @@
 const Account = require("../models/admin/adminModel")
 const Role = require("../models/admin/roleModel")
 const User = require("../models/userModel")
+const Post = require("../models/postModel")
 const md5 = require('md5');
 module.exports.dashboard = async (req, res) => {
   const users = await User.find({
@@ -170,9 +171,12 @@ module.exports.createPostAccount = async (req, res) => {
       const users = await User.find({
         deleted:false
       })
+      const posts = await Post.find({}).sort({DateAt:-1}).limit(3)
+      
        res.render("admin/pages/posts/index.pug", {
           pageTitle: "trang tổng quan",
-          users:users
+          users:users,
+          posts:posts
        })
     }
 
