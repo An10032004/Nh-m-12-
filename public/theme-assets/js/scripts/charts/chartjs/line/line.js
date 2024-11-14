@@ -1,19 +1,29 @@
-/*=========================================================================================
-    File Name: line.js
-    Description: Chartjs simple line chart
-    ----------------------------------------------------------------------------------------
-    Item Name: Chameleon Admin - Modern Bootstrap 4 WebApp & Dashboard HTML Template + UI Kit
-    Version: 1.0
-    Author: ThemeSelection
-    Author URL: https://themeselection.com/
-==========================================================================================*/
+$(window).on("load", async function() {
 
-// Line chart
-// ------------------------------
-$(window).on("load", function(){
-
-    //Get the context of the Chart canvas element we want to select
     var ctx = $("#line-chart");
+
+    async function fetchData() {
+        const response = await fetch('/stats/data');
+        const data = await response.json();
+        return data;
+    }
+
+    const dataFromDB = await fetchData();
+
+    // Kiểm tra dữ liệu đã nhận
+    console.log(dataFromDB);
+
+    // Sử dụng labels là các ngày trong tuần
+    const labels = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    // Mảng các màu sắc cho mỗi dataset
+    const colors = [
+        "#9C27B0",  // Màu tím cho "Accounts per day"
+        "#00A5A8",  // Màu xanh cho "Chats per day"
+        "#FF7D4D",  // Màu cam cho "Posts per day"
+        "#4CAF50",  // Màu xanh lá cho một dataset khác (nếu có thêm)
+        "#FF9800"   // Màu cam sáng cho một dataset khác (nếu có thêm)
+    ];
 
     // Chart Options
     var chartOptions = {
@@ -34,7 +44,7 @@ $(window).on("load", function(){
                 },
                 scaleLabel: {
                     display: true,
-                    labelString: 'Month'
+                    labelString: 'Day'
                 }
             }],
             yAxes: [{
@@ -46,63 +56,51 @@ $(window).on("load", function(){
                 scaleLabel: {
                     display: true,
                     labelString: 'Value'
+                },
+                ticks: {
+                    min: 0,   // Đặt giá trị tối thiểu cho trục Y
+                    max: 20,  // Đặt giá trị tối đa cho trục Y
+                    stepSize: 1 // Đặt độ chia nhỏ trục Y (1 đơn vị)
                 }
             }]
         },
         title: {
             display: true,
-            text: 'Chart.js Line Chart - Legend'
+            text: 'Whole Progress'
         }
     };
 
-    // Chart Data
+    // Tạo dữ liệu cho các datasets
     var chartData = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "My First dataset",
-            data: [65, 59, 80, 81, 56, 55, 40],
-            fill: false,
-            borderDash: [5, 5],
-            borderColor: "#9C27B0",
-            pointBorderColor: "#9C27B0",
-            pointBackgroundColor: "#FFF",
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 2,
-            pointRadius: 4,
-        }, {
-            label: "My Second dataset",
-            data: [28, 48, 40, 19, 86, 27, 90],
-            fill: false,
-            borderDash: [5, 5],
-            borderColor: "#00A5A8",
-            pointBorderColor: "#00A5A8",
-            pointBackgroundColor: "#FFF",
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 2,
-            pointRadius: 4,
-        }, {
-            label: "My Third dataset - No bezier",
-            data: [45, 25, 16, 36, 67, 18, 76],
-            lineTension: 0,
-            fill: false,
-            borderColor: "#FF7D4D",
-            pointBorderColor: "#FF7D4D",
-            pointBackgroundColor: "#FFF",
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 2,
-            pointRadius: 4,
-        }]
+        labels: labels, // Các ngày trong tuần
+        datasets: []
     };
 
+    // Duyệt qua các key trong dataFromDB và tạo dataset cho mỗi key
+    let colorIndex = 0; // Biến để theo dõi màu sắc đã dùng
+    for (let key in dataFromDB) {
+        chartData.datasets.push({
+            label: key, // Sử dụng key làm label cho dataset
+            data: dataFromDB[key], // Dữ liệu từ key đó
+            fill: false,
+            borderDash: [5, 5],
+            borderColor: colors[colorIndex], // Sử dụng màu sắc từ mảng colors
+            pointBorderColor: colors[colorIndex], // Màu của điểm
+            pointBackgroundColor: "#FFF",
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 2,
+            pointRadius: 4,
+        });
+        colorIndex++; // Tăng chỉ mục màu sắc
+    }
+
+    // Cấu hình cho chart
     var config = {
         type: 'line',
-
-        // Chart Options
-        options : chartOptions,
-
-        data : chartData
+        options: chartOptions,
+        data: chartData
     };
 
-    // Create the chart
+    // Tạo chart
     var lineChart = new Chart(ctx, config);
 });

@@ -66,9 +66,6 @@ user_route.post('/create-post',upload.single('image'),auth.isLogin,userControlle
 
 
 
-
-
-
 //api check PostMan
 user_route.get('/testApi',userController.getApi)
 user_route.patch('/updateApi',userController.editApi)

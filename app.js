@@ -19,6 +19,10 @@ const userRoute = require("./routes/userRoute")
 app.use('/',userRoute)
 const adminRoute = require("./routes/adminRoute")
 app.use('/',adminRoute)
+
+const statsRouter = require('./routes/statsRoutes');
+app.use('/stats', statsRouter);
+
 const io = require('socket.io')(http)
  
 var usp = io.of('/user-namespace')
