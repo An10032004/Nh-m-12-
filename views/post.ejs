@@ -98,7 +98,7 @@
 								<h1><%= posts[i]['title'] %></h1>
 								<p class="author"><%= posts[i]['content'] %></p>
 								<div class="fix post-meta">
-									<p>26 Sep, 2012  |  24 Comments</p>
+								<p> <%= moment(posts[i]['DateAt']).fromNow() %></p>
 									<p>Uploaded by <%= posts[i]['userName'] %></p>
 								</div>
 							</div>

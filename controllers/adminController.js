@@ -28,7 +28,7 @@ module.exports.indexAccount = async (req, res) => {
       })
       record.role = role.title
     }
-
+   
    res.render("admin/pages/accounts/index", {
        pageTitle: "Danh sách tài khoản",
        records: records
@@ -191,5 +191,12 @@ module.exports.createPostAccount = async (req, res) => {
           users:users
        })
     }
+
+module.exports.api = async (req,res) => {
+  const accounts = await Account.find({})
+
+  res.json(accounts)
+}
+   
        
  

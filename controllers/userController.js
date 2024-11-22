@@ -3,8 +3,10 @@ const bcrypt = require('bcrypt')
 const Chat = require('../models/chatModel')
 const Group = require('../models/groupModel')
 const Post = require('../models/postModel')
+const Member = require('../models/memberModel')
 const { MongoMissingCredentialsError } = require('mongodb')
 const { post } = require('../routes/userRoute')
+const mongoose = require('mongoose')
 const registerload = async(req,res) => {
     try {
         res.render('register')
@@ -163,8 +165,38 @@ const createGroup = async (req,res) => {
 
 const getMembers = async (req,res) => {
     try {
-        
-        var users = await User.find({ _id: { $nin:req.session.user._id}})
+        const group_id =new mongoose.Types.ObjectId(req.body.group_id)
+        const userId =new  mongoose.Types.ObjectId(req.session.user._id)
+        console.log(group_id)
+        var users = await User.aggregate([
+            {
+                $lookup:{
+                    from:"members",
+                    localField:"_id",
+                    foreignField:"user_id",
+                    pipeline:[
+                        {
+                            $match:{
+                            $expr:{
+                                $and:[
+                                    {$eq:["$group_id",group_id]}
+                                    
+                                ]
+                            }
+                        }
+                    }],
+                    as:"member"
+                }
+            },
+            {
+                $match:{
+                    "_id":{
+                        $nin:[userId]
+                    }
+                }
+            }
+        ]
+        )
 
         res.status(200).send({success:true,data:users})
 
@@ -172,6 +204,44 @@ const getMembers = async (req,res) => {
         res.status(400).send({success:false,msg:error.message})
     }
 }
+
+const addMembers = async (req,res) => {
+    try {
+        
+        if(!req.body.members){
+            res.status(200).send({success:false,msg:"Please select any one Member"})
+
+
+        }else if(req.body.members.length > parseInt(req.body.limit) ){
+            res.status(200).send({success:false,msg:"Member limited! (" + req.body.limit + ")"})
+        }else{
+
+            await Member.deleteMany({group_id:req.body.group_id})
+            var data = []
+
+            const members = req.body.members
+           
+            for(let i = 0 ; i < members.length;i++){
+                data.push({
+                    group_id:req.body.group_id,
+                    user_id:members[i]
+                })
+            }
+            await Member.insertMany(data)
+
+            res.status(200).send({success:true,msg:"Member added"})
+
+        }
+        
+
+    } catch (error) {
+        res.status(400).send({success:false,msg:error.message})
+    }
+}
+
+
+
+
 
 const getApi = async (req,res) =>{
     const user = await User.find({
@@ -254,6 +324,7 @@ module.exports = {
     updateChat,
     loadGroups,
     getMembers,
+    addMembers,
     createGroup,
     getApi,
     editApi,

@@ -222,13 +222,17 @@ $(".addMember").click(function(){
         data:{group_id:id},
         success:function(res){
             if(res.success == true){
+                console.log(res)
                 let users = res.data;
                 let html = '';
                 for(let i = 0 ;  i < users.length;i++){
+
+                    let isMemberOfGroup = users[i]['member'].length > 0 ? true : false
+
                     html+=`
                         <tr>
                             <td>
-                                <input type="checkbox" name="members[]" value="`+users[i]['_id']+`"/>
+                                <input type="checkbox" `+(isMemberOfGroup?'checked':'')+` name="members[]" value="`+users[i]['_id']+`"/>
                             </td>
 
                             <td>`+users[i]['name']+`</td>
@@ -238,6 +242,32 @@ $(".addMember").click(function(){
                 $('.addMemberTable').html(html)
             }else{
                 alert(res.msg)
+            }
+        }
+    })
+})
+
+$('#add-member-form').submit(function(event){
+    event.preventDefault()
+
+    var formData = $(this).serialize()
+
+    $.ajax({
+        url:"/add-members",
+        type:"POST",
+        data:formData,
+        success: function(res){
+            
+            if(res.success){
+                
+                $('#memberModel').modal('hide')
+                $('#add-member-form')[0].reset()
+                alert(res.msg)
+            }else{
+                $('#add-member-error').text(res.msg)
+                setTimeout(() =>{
+                    $('#add-member-error').text('')
+                },3000)
             }
         }
     })

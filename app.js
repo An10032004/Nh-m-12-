@@ -71,6 +71,6 @@ usp.on('connection',async function(socket){
 
 })
 
-http.listen(3001,function(){
+http.listen(3000,function(){
     console.log('server is running')
 })
