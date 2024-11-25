@@ -1,30 +1,37 @@
 <%-include('layouts/header.ejs') %>
 
-<h2 class="mb-4">HI , <%= user.name %></h2>
-<form action="/search" method="post" class="form-inline my-2 my-lg-0" id="searchForm" class="search-form"><input class="form-control" type="text" name="name" id="name" placeholder="Search" aria-label="Search"  /><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></form>  
+<h2 class="mb-4">Group Chat</h2>
     <div class="row">
     <div class="col-md-3">
         <ul class="list-group">
             <% 
-                if(users.length > 0){
-                    for(let i = 0 ; i < users.length;i++){
+                if(myGroups.length > 0){
+                    for(let i = 0 ; i < myGroups.length;i++){
                         %>
-                            <li class="list-group-item list-group-item-dark cursor-pointer user-list " data-id="<%= users[i]['_id'] %>">
-                                <img src="/<%=  users[i]['image'] %>" alt="" width="100px" height="100px">
-                                    <%= users[i]['name'] %>
+                            <li class="list-group-item list-group-item-dark cursor-pointer group-list " data-id="<%= myGroups[i]['_id'] %>">
+                                <img src="/<%= myGroups[i]['image'] %>" alt="" width="100px" height="100px">
+                                    <%= myGroups[i]['name'] %>
 
 
-                                    <% 
-                                        if (users[i]['is_online'] == '1') {
-                                            %>
-                                                <sup class="online-status" id="<%= users[i]['_id'] %>-status">Online</sup>
-                                            <%
-                                        } else {
-                                            %>
-                                                <sup class="offline-status" id="<%= users[i]['_id'] %>-status">Offline</sup>
-                                            <%
-                                        }
-                                    %>
+                                
+                                </li>
+                        <%
+                    }
+                }
+                %>
+
+               
+
+                <% 
+                if(joinedGroups.length > 0){
+                    for(let i = 0 ; i < joinedGroups.length;i++){
+                        %>
+                            <li class="list-group-item list-group-item-dark cursor-pointer group-list " data-id="<%= joinedGroups[i]['group_id']['_id'] %>">
+                                <img src="/<%= joinedGroups[i]['group_id']['image'] %>" alt="" width="100px" height="100px">
+                                    <%= joinedGroups[i]['group_id']['name'] %>
+
+
+                                
                                 </li>
                         <%
                     }
@@ -34,15 +41,15 @@
     </div>
     <div class="col-md-9">
         
-        <h3 class="start-head">Click to start chat</h3>
-        <div class="chat-section">
-            <div class="chat-container">
+        <h3 class="group-start-head">...</h3>
+        <div class="group-chat-section">
+            <div class="group-chat-container">
                 
                 
                 </div>
 
-                <form action="" id="chat-form" method="POST">
-                    <input type="text" name="message" placeholder="Enter message" id="message" class="border"  required>
+                <form action="" id="group-chat-form" method="POST">
+                    <input type="text" name="message" placeholder="Enter message" id="group-message" class="border"  required>
                     <input type="submit" value="Send Message" class="btn btn-primary">
                     </form>
                 </div>

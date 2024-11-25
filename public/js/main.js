@@ -272,3 +272,133 @@ $('#add-member-form').submit(function(event){
         }
     })
 })
+
+
+//update group
+
+$('.updateMember').click(function(){
+    var obj = JSON.parse($(this).attr('data-obj'))
+
+
+    $('#update_group_id').val(obj._id)
+    $('#last_limit').val(obj.limit)
+    $('#group_name').val(obj.name)
+    $('#group_limit').val(obj.limit)
+})
+
+
+$('#updateChatGroupForm').submit(function(e){
+    e.preventDefault()
+    $.ajax({
+        url:'/update-chat-group',
+        type:'POST',
+        data: new FormData(this),
+        contentType:false,
+        cache:false,
+        processData:false,
+        success:function(res){
+            alert(res.msg)
+            if(res.success){
+                location.reload()
+            }
+        }
+    })
+})
+
+//del chatGroup
+
+$('.deleteGroup').click(function(){
+    $('#delete_group_id').val($(this).attr('data-id'))
+    $('#delete_group_name').text($(this).attr('data-name'))
+})
+
+$('#deleteChatGroupForm').submit(function(e){
+    e.preventDefault()
+
+    var formData = $(this).serialize()
+
+    $.ajax({
+        url:'/delete-chat-group',
+        type:'POST',
+        data:formData,
+        success:function(res){
+            alert(res.msg)
+            if(res.success){
+                location.reload()
+            }
+        }
+    })
+})
+
+//sharelink
+
+$('.copy').click(function(){
+    $(this).prepend('<span class="copied_text">Copied</span>')
+
+
+    var group_id = $(this).attr('data-id')
+
+    var url = window.location.host + '/share-group/' + group_id
+
+    var temp = $("<input>")
+    $("body").append(temp)
+    temp.val(url).select()
+    document.execCommand('copy')
+
+
+    temp.remove()
+
+    setTimeout(() => {
+        $('.copied_text').remove()
+    },2000)
+})
+
+//joinGroup
+
+$('.join-now').click(function(){
+    $(this).text("Wait...")
+    $(this).attr('disabled','disabled')
+    var group_id = $(this).attr('data-id')
+
+    $.ajax({
+        url:'/join-group',
+        type:"POST",
+        data:{group_id},
+        success:function(res){
+            alert(res.msg)
+            if(res.success){
+                location.reload()
+            }
+            else{
+                
+                $(this).text('Join')
+                $(this).removeAttr('disabled')
+            }
+        }
+    })
+})
+
+//search
+const formSearch = document.querySelector("#form-search")
+if(formSearch) {
+  let url = new URL(window.location.href);
+  formSearch.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const search = e.target.elements.keyword.value;
+ 
+  if (search){
+    url.searchParams.set("keyword", search );
+  }
+  else {
+    url.searchParams.delete("keyword");
+  }
+  window.location.href = url.href
+})
+}
+
+//groupChat
+$('.group-list').click(function(){
+    $('.group-start-head').hide();
+    $('.group-chat-section').show();
+})

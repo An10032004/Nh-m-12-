@@ -1,21 +1,50 @@
-<h1>Register</h1>
-
-<form action="" method="POST" enctype="multipart/form-data">
-    <input type="text" name="name" placeholder="Enter Name" required>
-    <br>
-    <input type="text" name="email" placeholder="Enter Email" required>
-    <br>
-    <input type="file" name="image" required>
-    <br>
-    <input type="password" name="password" placeholder="Enter Password" required>
-    <br>
-    <input type="submit" value="Register">
-</form>
-
-<% 
-    if(typeof message !== 'undefined'){
-        %>
-            <p style="color:green"><%= message %></p>
-        <%
-    } 
-%>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <link rel="stylesheet" href="/css/login.css">
+    </head>
+    <body style="background: #949494">
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="box" style="height: 550px;">
+                <div class="form" >
+                    <h2>Register</h2>
+                    <div class="inputbox">
+                        <input type="text" name="name" required>
+                        <span>Enter Name</span>
+                        <i></i>
+                    </div>
+                    <div class="inputbox">
+                        <input type="text" name="email" required>
+                        <span>Enter Email</span>
+                        <i></i>
+                    </div>
+                    <div class="inputbox">
+                        
+                       
+                        <input type="file" name="image"  value="Yours image" required style="color: white;" >
+                    </div>
+                    <div class="inputbox">
+                        <input type="password" name="password" required>
+                        <span>Enter Password</span>
+                        <i></i>
+                    </div>
+                    <div class="links">
+                       
+                        <a href="/">Sign in</a>
+                    </div>
+                    <input type="submit" value="Register">
+                    <% 
+                    if(typeof message !== 'undefined'){
+                        %>
+                            <p style="color:green; margin-top: 15px;"><%= message %></p>
+                        <%
+                    } 
+                    %>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

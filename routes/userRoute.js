@@ -59,14 +59,20 @@ user_route.post('/groups',upload.single('image'),userController.createGroup)
 user_route.post('/get-members',auth.isLogin,userController.getMembers)
 user_route.post('/add-members',auth.isLogin,userController.addMembers)
 
+user_route.post('/update-chat-group',upload.single('image'),userController.updateChatGroup)
+user_route.post('/delete-chat-group',userController.deleteChatGroup)
 
 
 user_route.get('/posts',auth.isLogin,userController.getPost)
 user_route.get('/create-post',auth.isLogin,userController.loadPost)
 user_route.post('/create-post',upload.single('image'),auth.isLogin,userController.submitPost)
 
+user_route.get('/share-group/:id',userController.shareGroup)
+user_route.post('/join-group',userController.joinGroup)
+user_route.get('/group-chat',auth.isLogin,userController.groupChat)
 
-
+//search
+user_route.post('/search', userController.searchName); 
 //api check PostMan
 user_route.get('/testApi',userController.getApi)
 user_route.patch('/updateApi',userController.editApi)

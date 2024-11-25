@@ -7,6 +7,7 @@ const Member = require('../models/memberModel')
 const { MongoMissingCredentialsError } = require('mongodb')
 const { post } = require('../routes/userRoute')
 const mongoose = require('mongoose')
+const searchHelper = require("../helpers/search");
 const registerload = async(req,res) => {
     try {
         res.render('register')
@@ -78,9 +79,13 @@ const logout = async(req,res) => {
 
 const loadDashboard = async(req,res) => {
     try {
+
+        
         var users = await User.find({_id: {
-            $nin:[req.session.user._id]
+            $nin:[req.session.user._id],
+            
         }})
+        
         res.render('dashboard',{user:req.session.user,users:users})
     } catch (error) {
         console.log(error.message)
@@ -242,6 +247,56 @@ const addMembers = async (req,res) => {
 
 
 
+const updateChatGroup = async (req,res) => {
+    try {
+        
+        if(parseInt(req.body.limit) < parseInt(req.body.last_limit)){
+                await Member.deleteMany({group_id:req.body.id})
+        }
+
+        var uploadObj;
+
+        if(req.file != undefined){
+            updateObj = {
+                name:req.body.name,
+                image: 'image/'+ req.file.filename,
+                limit:req.body.limit
+            }
+        }
+        else{
+            updateObj = {
+                name:req.body.name,
+                limit:req.body.limit
+            }
+        }
+        
+        await Group.findByIdAndUpdate({_id:req.body.id},{
+            $set:updateObj
+        })
+
+        res.status(200).send({success:true,msg:'Group updated!'})
+
+        
+
+    } catch (error) {
+        res.status(400).send({success:false,msg:error.message})
+    }
+}
+
+
+const deleteChatGroup = async (req,res) => {
+    try {
+        await Group.deleteOne({_id:req.body.id})
+        await Member.deleteMany({group_id:req.body.id})
+        
+        res.status(200).send({success:true,msg:'Group Deleted!'})
+
+        
+
+    } catch (error) {
+        res.status(400).send({success:false,msg:error.message})
+    }
+}
 
 const getApi = async (req,res) =>{
     const user = await User.find({
@@ -310,7 +365,67 @@ const submitPost = async (req,res) => {
     res.render('createPost',{message:'Post added'})
 }
 
+const shareGroup = async (req,res) => {
+    try {
+        var groupData = await Group.findOne({ _id: req.params.id})
+        if(!groupData){
+            res.render('error',{message:'404 not found'})
+        }else if(req.session.user == undefined){
+            res.render('error',{message:'You need to login to access this Url'})
 
+        }else{
+            var totalMembers = await Member.find({group_id:req.params.id}).countDocuments()
+            var available = groupData.limit - totalMembers
+
+            var isOwner = groupData.creator_id == req.session.user._id ? true:false
+            var isJoined =  await Member.find({group_id:req.params.id,user_id:req.session.user._id}).countDocuments()
+
+            res.render('shareLink',{group:groupData,totalMembers:totalMembers,isOwner:isOwner,isJoined:isJoined,available:available})
+
+
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const joinGroup = async (req,res) => {
+    try {
+
+        const member = new Member({
+            group_id:req.body.group_id ,
+            user_id:req.session.user._id
+        })
+        await member.save()
+        res.send({success:true,msg:'Welcome to group'})
+        
+    } catch (error) {
+        res.send({success:false,msg:error.message})
+    }
+}
+
+const groupChat = async (req,res) => {
+    try {
+        const myGroups = await Group.find({creator_id:req.session.user._id})
+        const joinedGroups = await Member.find({user_id:req.session.user._id}).populate('group_id')    
+
+        res.render('chat-group',{myGroups:myGroups,joinedGroups:joinedGroups})
+     } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const searchName = async (req, res) => {
+    try {
+        const keyword = req.body.name;
+        const users = await User.find({
+            name: { $regex: keyword, $options: 'i' }, 
+        });
+        res.render('search', { users }); 
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 module.exports = {
     registerload,
@@ -326,6 +441,12 @@ module.exports = {
     getMembers,
     addMembers,
     createGroup,
+    updateChatGroup,
+    deleteChatGroup,
+    shareGroup,
+    joinGroup,
+    groupChat,
+    searchName,
     getApi,
     editApi,
     getPost,
