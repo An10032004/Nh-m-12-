@@ -68,9 +68,16 @@ usp.on('connection',async function(socket){
     socket.on('chatUpdated',function(data){
         socket.broadcast.emit('chatMessageUpdated',data)
     })
+    //group
+    socket.on('newGroupChat',function(data){
+        socket.broadcast.emit('loadNewGroupChat',data)
+    })
+    socket.on('groupChatDeleted',function(id){
+        socket.broadcast.emit('groupChatMessageDeleted',id)
 
+    })
 })
 
-http.listen(3000,function(){
+http.listen(3001,function(){
     console.log('server is running')
 })

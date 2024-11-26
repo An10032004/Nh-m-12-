@@ -62,7 +62,7 @@
 
 
 <!-- Delete Modal -->
-<div class="modal fade" id="deleteChatModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="deleteGroupChatModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -71,11 +71,11 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="delete-chat-form" method="post">
+      <form id="delete-group-chat-form" method="post">
         <div class="modal-body">
-            <input type="hidden" name="id" id="delete-message-id">
+            <input type="hidden" name="id" id="delete-group-message-id">
             <p>Are u Sure?</p>
-            <p><b id="delete-message"></b></p>
+            <p><b id="delete-group-message"></b></p>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

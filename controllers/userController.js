@@ -2,6 +2,7 @@ const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const Chat = require('../models/chatModel')
 const Group = require('../models/groupModel')
+const GroupChat = require('../models/groupChatModel')
 const Post = require('../models/postModel')
 const Member = require('../models/memberModel')
 const { MongoMissingCredentialsError } = require('mongodb')
@@ -22,7 +23,7 @@ const register = async(req,res) => {
         const userModel =   new User({
             name : req.body.name,
             email: req.body.email,
-            image:'image/' + req.file.filename,
+            image:'images/' + req.file.filename,
             password:req.body.password
         })
 
@@ -426,6 +427,38 @@ const searchName = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+const saveGroupChat = async (req, res) => {
+    try {
+        var chat =  new GroupChat({
+            sender_id:req.body.sender_id,
+            group_id:req.body.group_id,
+            message:req.body.message
+        })
+
+        var newChat = await chat.save()
+        var cChat = await GroupChat.findOne({_id:newChat._id}).populate('sender_id')
+        res.send({success:true,chat:cChat})
+    } catch (error) {
+        res.send({success:false,msg:error.message})
+    }
+};
+const loadGroupChat = async (req, res) => {
+    try {
+        const groupChats = await  GroupChat.find({group_id:req.body.group_id}).populate('sender_id')
+        res.send({success:true,chats:groupChats})
+    } catch (error) {
+        res.send({success:false,msg:error.message})
+    }
+};
+
+const deleteGroupChat = async (req, res) => {
+    try {
+         await  GroupChat.deleteOne({_id:req.body.id})
+        res.send({success:true,msg:'Chat deleted '})
+    } catch (error) {
+        res.send({success:false,msg:error.message})
+    }
+};
 
 module.exports = {
     registerload,
@@ -446,6 +479,9 @@ module.exports = {
     shareGroup,
     joinGroup,
     groupChat,
+    saveGroupChat,
+    loadGroupChat,
+    deleteGroupChat,    
     searchName,
     getApi,
     editApi,
