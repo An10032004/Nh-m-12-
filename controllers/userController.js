@@ -323,11 +323,22 @@ const editApi = async (req,res) =>{
 
 const getPost = async (req,res) => {
 
-    const posts = await Post.find({}).sort({DateAt:-1}).limit(4)
+    let objpagination = {
+        current:1,
+        limit : 2
+    }
+    if(req.query.page){
+        objpagination.current = parseInt(req.query.page)
+    }
+    objpagination.skip = (objpagination.current - 1 )*objpagination.limit
+
+    const count = await Post.countDocuments({})
+    const totalPages =  Math.ceil(count/objpagination.limit)
+    objpagination.totalPages = totalPages
+    const posts = await Post.find({}).sort({DateAt:-1}).limit(objpagination.limit).skip(objpagination.skip)
 
 
-
-    res.render('post',{posts:posts})
+    res.render('post',{posts:posts,pagination:objpagination})
 }
 
 const loadPost = async (req,res) => {

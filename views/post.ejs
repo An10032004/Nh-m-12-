@@ -1,24 +1,52 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<%-include('layouts/header.ejs') %>
+	<style>
+		.single_content {
+    width: calc(33.33% - 20px); /* Điều chỉnh kích thước và khoảng cách */
+    margin: 10px;
+    box-sizing: border-box;
+    float: left;
+    height: 300px; /* Chiều cao cố định */
+	width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #ddd;
+}
 
-<!--
----- Clean html template by http://WpFreeware.com
----- This is the main file (index.html).
----- You are allowed to change anything you like. Find out more Awesome Templates @ wpfreeware.com
+.single_content img {
+    width: 100%;
+    height: 200px; /* Chiều cao cố định cho ảnh */
+    object-fit: cover; /* Đảm bảo ảnh không bị biến dạng */
+}
 
--->	
+.single_content_info {
+    padding: 10px;
+    flex-grow: 1;
+}
 
-	<head>
-		<title>Welcome to my site</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<!-- Font Awesome -->
-		<link rel="stylesheet" href="/css/font-awesome.min.css">
-		<link rel="stylesheet" href="/font/font.css">
-		<link href="/css/style2.css" rel="stylesheet" media="screen">	
-		<link href="/css/responsive.css" rel="stylesheet" media="screen">		
-	</head>
-	
+.single_content_info h1 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.single_content_info p.author {
+    font-size: 14px;
+    color: #666;
+}
+
+.post-meta {
+    font-size: 12px;
+    color: #999;
+    display: flex;
+    justify-content: space-between;
+}
+.page-item{
+	margin: 0;
+}
+
+	</style>
 
 	<body>
 		<div class="fix header_area">
@@ -26,68 +54,26 @@
 				<div class="logo floatleft">
 					<h1>Blog</h1>
 				</div>
-				<div class="manu floatright">
-					<ul id="nav-top">
-						<li><a href="/dashboard">Home</a></li>
-						<li><a href="contact.html">contact</a></li>
-					</ul>
-				</div>
+				
 			</div>
 		</div>
 		
 		<!--Clean template by WpFreeware.com-->
 		
-		
 		<div class="fix content_area">
+			
+			<div class="fix top_add_bar">
 				
-				<div class="fix top_add_bar">
-					<div class="addbar_leaderborard"><img src="http://placehold.it/728x90"/></div>
-				</div>
+			  </div>
+
+			 
 				
-				<!-- <div class="manu_area">
-					<div class="mainmenu menu-wrap wrap">
-						<ul id="nav-bottom">
-							<li><a href="">Categories</a></li>
-							<li><a href="">Freebies</a></li>
-							<li><a href="">Services</a>
-								<ul>
-									<li><a href="">Single item</a></li>
-									<li><a href="">Single item</a></li>
-									<li><a href="">Single item</a></li>
-									<li><a href="">Single item</a></li>
-									<li><a href="">Single item</a></li>
-								</ul>
-							</li>
-							<li><a href="">Gallery</a></li>
-							<li><a href="">About us</a></li>
-							<li><a href="">Privacy policy</a></li>
-							<li><a href="">Contact us</a></li>
-						</ul>
-					</div>
-				</div> -->
 			<div class="fix wrap content_wrapper">
 				<div class="fix content">
 					<div class="fix main_content floatleft">
 						<div class="fix single_content_wrapper">
 						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
+				
 					<%
 					if(posts.length > 0){
 						for(let i = 0 ; i < posts.length;i++){
@@ -122,14 +108,56 @@
 						
 						</div>
 						
-						<div class="pagination fix">
-							<a href="">1</a>
-							<a href="">1</a>
-							<a href="">1</a>
-							<a href="">1</a>
-							<a href="">1</a>
-							<a href="">1</a>
-						</div>
+						
+						<nav>
+    <ul class="pagination" style="float: left;">
+        <% if (pagination.current > 1) { %>
+            <li class="page-item">
+                <button class="page-link" data-pagination="1">First</button>
+            </li>
+            <li class="page-item">
+                <button class="page-link" data-pagination="<%= pagination.current- 1 %>">Trang trước</button>
+            </li>
+        <% } %>
+
+        <% for (var i = 1; i <= pagination.totalPages; i++) { %>
+            <li class="page-item <%= pagination.current == i ? 'active' : '' %>">
+                <button class="page-link" data-pagination="<%= i %>"><%= i %></button>
+            </li>
+        <% } %>
+
+        <% if (pagination.current < pagination.totalPages) { %>
+            <li class="page-item">
+                <button class="page-link" data-pagination="<%= pagination.current + 1 %>">Trang kế</button>
+            </li>
+            <li class="page-item">
+                <button class="page-link" data-pagination="<%= pagination.totalPages %>">Last</button>
+            </li>
+        <% } %>
+    </ul>
+</nav>
+
+						
+						
+						
+						<script>
+							const buttonPagination = document.querySelectorAll("[data-pagination]")
+
+								if(buttonPagination){
+									let url = new URL(window.location.href)
+										buttonPagination.forEach(button => {
+											button.addEventListener("click",() => {
+												const page = button.getAttribute("data-pagination")
+
+												url.searchParams.set("page", page)
+
+												window.location.href = url.href
+									})
+								})
+								}
+							</script>
+
+
 					</div>
 					<div class="fix sidebar floatright">
 						<div class="fix single_sidebar">
@@ -141,9 +169,9 @@
 										 if(posts[i]['popular'] === 'true'){
 											%>
 												<div class="fix single_popular">
-												<img src="images/popular.png" class="floatleft"/>
+												<img src="<%= posts[i]['image'] %>" class="floatleft"/>
 												<h2><%= posts[i]['title']%></h2>
-												<p>12 Nov, 2012</p>
+												<p> <%= moment(posts[i]['DateAt']).fromNow() %></p>
 											</div>
 
 											<%
@@ -236,28 +264,6 @@
 			</div>
 			</div>
 		</div>
-		<script type="text/javascript" src="/js/placeholder_support_IE.js"></script>
-		<script type="text/javascript" src="/js/selectnav.min.js"></script>
-		<script type="text/javascript">
-			selectnav('nav-top', {
-			  label: '-Navigation-',
-			  nested: true,
-			  indent: '-'
-			});
-			
-			selectnav('nav-bottom', {
-			  label: '-Navigation-',
-			  nested: true,
-			  indent: '-'
-			});			
-		</script>		
-		<script src="http://code.jquery.com/jquery.js"></script>	
 		
-		<!--
+<%-include('layouts/footer.ejs') %>
 		
-		This Template is designed by WpFreeware.com Team, You are allowed to change anything you like.
-		Find out More Awesome template at http://www.WpFreeware.com.
-		
-		-->
-	</body>
-</html>
