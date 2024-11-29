@@ -8203,7 +8203,7 @@ h1, h2, h3, h4, h5,
   #sidebar .h6 {
     color: #fff; }
   #sidebar.active {
-    margin-left: -250px; }
+    margin-left: -136px; }
     #sidebar.active .custom-menu {
       margin-right: -50px; }
   #sidebar h1 {
@@ -8264,7 +8264,7 @@ h1, h2, h3, h4, h5,
       background: transparent;
       border-color: transparent; }
       #sidebar .custom-menu .btn.btn-primary i {
-        color: black;
+        color: white;
         font-size: 24px; }
       #sidebar .custom-menu .btn.btn-primary:hover, #sidebar .custom-menu .btn.btn-primary:focus {
         background: transparent !important;
@@ -8288,7 +8288,9 @@ a[data-toggle="collapse"] {
 
 #content {
   width: 100%;
-  padding: 0;
+  padding-top: 0px;
+  padding-left: 15px;
+  margin-right: 40px;
   min-height: 100vh;
   -webkit-transition: all 0.3s;
   -o-transition: all 0.3s;
@@ -8334,7 +8336,8 @@ a[data-toggle="collapse"] {
 
   /* CSS chat */
   .list-group li:hover{
-    background-color: black
+    background-color: #ccc;
+    color:black
   }
   .cursor-pointer{
     cursor: pointer;
@@ -8414,3 +8417,4 @@ a[data-toggle="collapse"] {
   border-radius: 100px;
   border: 1px solid red;    
 }
+

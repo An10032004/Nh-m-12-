@@ -1,114 +1,98 @@
 <%-include('layouts/header.ejs') %>
+<link rel="stylesheet" href="/css/dashboard.css">
+<style>
+  /* Chat Section Styles */
+  
+</style>
 
-<h2 class="mb-4">HI , <%= user.name %></h2>
-<form action="/search" method="post" class="form-inline my-2 my-lg-0" id="searchForm" class="search-form"><input class="form-control" type="text" name="name" id="name" placeholder="Search" aria-label="Search"  /><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></form>  
-    <div class="row">
-    <div class="col-md-3">
-        <ul class="list-group">
-            <% 
-                if(users.length > 0){
-                    for(let i = 0 ; i < users.length;i++){
-                        %>
-                            <li class="list-group-item list-group-item-dark cursor-pointer user-list " data-id="<%= users[i]['_id'] %>">
-                                <img src="/<%=  users[i]['image'] %>" alt="" width="100px" height="100px">
-                                    <%= users[i]['name'] %>
-
-
-                                    <% 
-                                        if (users[i]['is_online'] == '1') {
-                                            %>
-                                                <sup class="online-status" id="<%= users[i]['_id'] %>-status">Online</sup>
-                                            <%
-                                        } else {
-                                            %>
-                                                <sup class="offline-status" id="<%= users[i]['_id'] %>-status">Offline</sup>
-                                            <%
-                                        }
-                                    %>
-                                </li>
-                        <%
-                    }
-                }
-                %>
-        </ul>
-    </div>
-    <div class="col-md-9">
-        
-        <h3 class="start-head">Click to start chat</h3>
-        <div class="chat-section">
-            <div class="chat-container">
-                
-                
-                </div>
-
-                <form action="" id="chat-form" method="POST">
-                    <input type="text" name="message" placeholder="Enter message" id="message" class="border"  required>
-                    <input type="submit" value="Send Message" class="btn btn-primary">
-                    </form>
-                </div>
-            
-
+        <form action="/search" method="post" class="form-inline my-2 my-lg-0 mb-4" id="searchForm" style="padding-bottom: 15px;">
+          <input class="form-control " type="text" name="name" id="name" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success  my-sm-0 hidden" type="submit"></button>
+        </form>  
+        <div class="row">
+          <div class="col-md-3">
+            <ul class="list-group">
+              <% if(users.length > 0){ %>
+                <% for(let i = 0; i < users.length; i++){ %>
+                  <li class="list-group-item list-group-item-light cursor-pointer user-list d-flex align-items-center" data-id="<%= users[i]['_id'] %>">
+                    <div class="user-status">
+                      <img src="/<%= users[i]['image'] %>" alt="<%= users[i]['name'] %>" class="user-image">
+                      <span class="status-dot <%= users[i]['is_online'] == '1' ? 'online' : 'offline' %>" 
+                            id="<%= users[i]['_id'] %>-dot" 
+                            aria-hidden="true"></span>
+                    </div>
+                    <div>
+                      <%= users[i]['name'] %>
+                      <span class="sr-only" id="<%= users[i]['_id'] %>-status">
+                        <%= users[i]['is_online'] == '1' ? 'Online' : 'Offline' %>
+                      </span>
+                    </div>
+                  </li>
+                <% } %>
+              <% } %>
+            </ul>
+          </div>
+          <div class="col-md-9">
+            <div class="chat-section">
+              <div class="selected-user"></div>
+              <div class="chat-container"></div>
+              <form action="" id="chat-form" method="POST" class="d-flex">
+                <input type="text" name="message" placeholder="Enter message" id="message" class="form-control flex-grow-1" required>
+                <input type="submit" value="Send" class="btn btn-primary">
+              </form>
+            </div>
+          </div>
         </div>
-
-</div>
-
-
-
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteChatModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Delete Chat</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
-      <form id="delete-chat-form" method="post">
-        <div class="modal-body">
-            <input type="hidden" name="id" id="delete-message-id">
-            <p>Are u Sure?</p>
-            <p><b id="delete-message"></b></p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-danger">Delete</button>
-        </div>
-      </form>
-
-
     </div>
-  </div>
-</div>
 
-
-<!-- Update Modal -->
-<div class="modal fade" id="editChatModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Edit Chat</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteChatModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Delete Chat</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="delete-chat-form" method="post">
+            <div class="modal-body">
+              <input type="hidden" name="id" id="delete-message-id">
+              <p>Are you sure?</p>
+              <p><b id="delete-message"></b></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <form id="update-chat-form" method="post">
-        <div class="modal-body">
-            <input type="hidden" name="id" id="edit-message-id">
-            <input type="text" name="message" id="update-message" required placeholder="Enter-message">
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Update</button>
-        </div>
-      </form>
-
-
     </div>
-  </div>
-</div>
 
-
-
-
+    <!-- Update Modal -->
+    <div class="modal fade" id="editChatModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Edit Chat</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="update-chat-form" method="post">
+            <div class="modal-body">
+              <input type="hidden" name="id" id="edit-message-id">
+              <input type="text" name="message" id="update-message" class="form-control" required placeholder="Enter message">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
 <%-include('layouts/footer.ejs') %>

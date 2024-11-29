@@ -1,8 +1,15 @@
 <%-include('layouts/header.ejs') %>
-
+<style>
+    .w{
+        background-color: white;
+        padding:40px;
+        width: 100%;
+        height:500px;
+    }
+</style>
 <div class="container" >
 
-    <div>
+    <div class="w">
         <img src="/<%= group.image %>" alt="" width="200px" height="200px">
         <p><b><%= group.name %></b></p>
         <p><b>Total Members:- </b> <%= totalMembers %></p>

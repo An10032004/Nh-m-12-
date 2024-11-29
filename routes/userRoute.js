@@ -54,28 +54,28 @@ user_route.patch('/update-chat',userController.updateChat)
 
 
 user_route.get('/groups',auth.isLogin,userController.loadGroups)
-user_route.post('/groups',upload.single('image'),userController.createGroup)
+user_route.post('/groups',upload.single('image'),auth.isLogin,userController.createGroup)
 
 user_route.post('/get-members',auth.isLogin,userController.getMembers)
 user_route.post('/add-members',auth.isLogin,userController.addMembers)
 
-user_route.post('/update-chat-group',upload.single('image'),userController.updateChatGroup)
-user_route.post('/delete-chat-group',userController.deleteChatGroup)
+user_route.post('/update-chat-group',upload.single('image'),auth.isLogin,userController.updateChatGroup)
+user_route.post('/delete-chat-group',auth.isLogin,userController.deleteChatGroup)
 
 
 user_route.get('/posts',auth.isLogin,userController.getPost)
 user_route.get('/create-post',auth.isLogin,userController.loadPost)
 user_route.post('/create-post',upload.single('image'),auth.isLogin,userController.submitPost)
 
-user_route.get('/share-group/:id',userController.shareGroup)
-user_route.post('/join-group',userController.joinGroup)
+user_route.get('/share-group/:id',auth.isLogin,userController.shareGroup)
+user_route.post('/join-group',auth.isLogin,userController.joinGroup)
 user_route.get('/group-chat',auth.isLogin,userController.groupChat)
-user_route.post('/group-chat-save', userController.saveGroupChat); 
-user_route.post('/load-group-chats', userController.loadGroupChat); 
-user_route.post('/delete-group-chats', userController.deleteGroupChat); 
+user_route.post('/group-chat-save',auth.isLogin, userController.saveGroupChat); 
+user_route.post('/load-group-chats',auth.isLogin, userController.loadGroupChat); 
+user_route.post('/delete-group-chats',auth.isLogin, userController.deleteGroupChat); 
 
 //search
-user_route.post('/search', userController.searchName); 
+user_route.post('/search',auth.isLogin, userController.searchName); 
 //api check PostMan
 user_route.get('/testApi',userController.getApi)
 user_route.patch('/updateApi',userController.editApi)

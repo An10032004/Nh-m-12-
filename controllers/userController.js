@@ -88,6 +88,7 @@ const loadDashboard = async(req,res) => {
         }})
         
         res.render('dashboard',{user:req.session.user,users:users})
+
     } catch (error) {
         console.log(error.message)
     }

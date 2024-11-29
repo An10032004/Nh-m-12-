@@ -43,8 +43,24 @@ $(document).ready(function () {
     $('.user-list').click(function () {
         var userId = $(this).attr('data-id')
         receiver_id = userId
+        var userName = $(this).find('.user-status + div').contents().first().text().trim();
+        var userImage = $(this).find('img').attr('src');
+        var isOnline = $(this).find('.status-dot').hasClass('online');
+        $('.chat-section').removeClass('animate');
+        void $('.chat-section')[0].offsetWidth; // Reset layout để kích hoạt lại animation
+        $('.chat-section').addClass('animate');
+
         $('.start-head').hide();
         $('.chat-section').show();
+
+        $('.selected-user').html(`
+            <div class="user-status">
+                <img src="${userImage}" alt="${userName}" class="user-image">
+                <span class="status-dot ${isOnline ? 'online' : 'offline'}" aria-hidden="true"></span>
+            </div>
+            <span class="selected-user-name" style="margin-right:30px">${userName}</span>
+            <span class="sr-only">${isOnline ? 'Online' : 'Offline'}</span>
+        `);
 
         socket.emit('existsChat', { sender_id: sender_id, receiver_id: receiver_id })
     })
@@ -54,16 +70,14 @@ $(document).ready(function () {
 });
 // UserOnline status
 socket.on('getOnlineUser', function (data) {
-    $('#' + data.user_id + '-status').text('Online')
-    $('#' + data.user_id + '-status').removeClass('offline-status')
-    $('#' + data.user_id + '-status').addClass('online-status')
-})
+    $('#' + data.user_id + '-status').text('Online');
+    $('#' + data.user_id + '-dot').removeClass('offline').addClass('online');
+});
 
 socket.on('getOfflineUser', function (data) {
-    $('#' + data.user_id + '-status').text('Offline')
-    $('#' + data.user_id + '-status').addClass('offline-status')
-    $('#' + data.user_id + '-status').removeClass('online-status')
-})
+    $('#' + data.user_id + '-status').text('Offline');
+    $('#' + data.user_id + '-dot').removeClass('online').addClass('offline');
+});
 
 // chat save 
 $('#chat-form').submit(function (event) {
@@ -80,6 +94,7 @@ $('#chat-form').submit(function (event) {
                 $('#message').val('')
                 let chat = response.data.message
                 let html = `
+                            
                             <div class="current-user-chat" id='`+ response.data._id + `'>
                                 <h5 > <span>`+ chat + `</span> 
                                     
@@ -122,7 +137,7 @@ socket.on('loadChats', function (data) {
         }
         html += `
                      <div class='`+ addClass + `' id= '` + chats[x]['_id'] + `'>
-                                <h5 > <span>`+ chats[x]['message'] + ` </span>`
+                                <h5 > <span >`+ chats[x]['message'] + ` </span>`
 
         if (chats[x]['sender_id'] == sender_id) {
             html += `<i class="fa fa-trash" aria-hidden="true" data-id='` + chats[x]['_id'] + `' data-toggle="modal" data-target="#deleteChatModel"></i>
@@ -425,7 +440,7 @@ $('#group-chat-form').submit(function (event) {
                 $('#group-message').val('')
                 let message = response.chat.message
                 let html = `
-                    <div class="current-user-chat" id='`+ response.chat._id + `'>
+                    <div class="current-user-chat"'`+ response.chat._id + `'>
                         
                         <h5 > <span>`+ message + `</span> 
                         <i class="fa fa-trash deleteGroupChat" aria-hidden="true" data-id='`+response.chat._id+`' data-toggle="modal" data-target="#deleteGroupChatModel"></i>
