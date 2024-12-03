@@ -29,6 +29,79 @@ head
   link(rel='stylesheet' type='text/css' href='/theme-assets/css/core/menu/menu-types/vertical-menu.css')
   link(rel='stylesheet' type='text/css' href='/theme-assets/css/core/colors/palette-gradient.css')
   link(rel='stylesheet' type='text/css' href='/theme-assets/css/pages/dashboard-ecommerce.css')
+  style.
+    .notification-dropdown {
+        max-height: 500px; /* Chiều cao tối đa của menu */
+        overflow-y: auto;  /* Thêm thanh cuộn theo chiều dọc khi vượt quá chiều cao */
+      }
+    .notification-item {
+        padding: 10px;
+        border-bottom: 1px solid #eeeeee;
+      }
+      .notification-item:last-child {
+        border-bottom: none;
+      }
+      .notification-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .notification-time {
+        font-size: 12px;
+        color: #999;
+      }
+      .notification-time {
+          font-size: 12px;
+          color: #999;
+          margin-left: auto;
+      }
+      .notification-icon {
+          font-size: 20px;
+          color: #7367F0;
+      } 
+      .notification-icon {
+          font-size: 24px;
+          color: #fff;
+          background-color: #7367F0;
+          padding: 10px;
+          border-radius: 8%;
+          box-shadow: 0 4px 15px rgba(115, 103, 240, 0.4);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .notification-item:hover .notification-icon {
+          transform: scale(1.1);
+          box-shadow: 0 6px 20px rgba(115, 103, 240, 0.6);
+      }
+      .sub-menu {
+        list-style: none;
+        margin: 0;
+        padding: 10px 20px;
+        background-color: #f9f9f9;
+        border-left: 2px solid #7367f0;
+        display: none;
+      }
+
+      .sub-menu li a {
+        display: block;
+        padding: 5px 0;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .notification-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .toggle-icon {
+        margin-left: auto;
+        cursor: pointer;
+      }
+
+      .collapsible.active + .sub-menu {
+        display: block;
+      }
   nav.header-navbar.navbar-expand-md.navbar.navbar-with-menu.navbar-without-dd-arrow.fixed-top.navbar-semi-light
     .navbar-wrapper
       .navbar-container.content
@@ -85,18 +158,49 @@ head
           ul.nav.navbar-nav.float-right
             li.dropdown.dropdown-notification.nav-item
               a.nav-link.nav-link-label(href='#' data-toggle='dropdown')
-                i.ficon.ft-mail              
-              .dropdown-menu.dropdown-menu-right
+                i.ficon.ft-bell.bell-icon
+                span.badge.badge-pill.badge-danger.notification-badge #{total}
+              .dropdown-menu.dropdown-menu-right.notification-dropdown
                 .arrow_box_right
-                  a.dropdown-item(href='#')
-                    i.ft-book
-                    |  Read Mail
-                  a.dropdown-item(href='#')
-                    i.ft-bookmark
-                    |  Read Later
-                  a.dropdown-item(href='#')
-                    i.ft-check-square
-                    |  Mark all Read
+                  h6.dropdown-header Notifications 
+                  .dropdown-divider
+                  a.dropdown-item.notification-item(href='#' data-notification-id='1')
+                    i.ft-mail.notification-icon
+                    span.notification-title New message received
+                    small.text-muted.notification-time 
+                  ul 
+                      .notification-item
+                        .notification-title 5 new support tickets
+                        .notification-time 10 minutes ago
+                      .notification-item
+                          .notification-title User feedback received
+                          .notification-time 30 minutes ago
+                      .notification-item
+                          .notification-title Message from team lead
+                          .notification-time 1 hour ago
+                    
+                  a.dropdown-item.notification-item(href='#' data-notification-id='2')
+                    i.ft-bookmark.notification-icon
+                    span.notification-title New Posts created
+                  each item in posts 
+                    .notification-item
+                      .notification-name #{item.title}
+                      .notification-time #{moment(item.createdAt).fromNow()}
+
+                  a.dropdown-item.notification-item(href='#' data-notification-id='3')
+                    i.ft-check-square.notification-icon
+                    span.notification-title New Groups created
+                  each item in groups 
+                    .notification-item
+                      .notification-name #{item.name}
+                      .notification-time #{moment(item.createdAt).fromNow()}
+
+                  .dropdown-divider
+                  a.dropdown-item.text-center(href='/ad/notifications') View All Notifications
+
+
+
+
             li.dropdown.dropdown-user.nav-item
               a.dropdown-toggle.nav-link.dropdown-user-link(href='#' data-toggle='dropdown')
                 span.avatar.avatar-online
@@ -150,10 +254,10 @@ head
           a(href='/ad/charts')
             i.ft-pie-chart
             span.menu-title(data-i18n='') Charts
-        //- li.nav-item
-        //-   a(href='icons.html')
-        //-     i.ft-droplet
-        //-     span.menu-title(data-i18n='') Icons
+        li.nav-item
+          a(href='/ad/notifications')
+            i.ft-bell
+            span.menu-title(data-i18n='') Notifications
         li.nav-item
           a(href='/ad/posts')
             i.ft-layers
@@ -199,3 +303,8 @@ script.
       body.classList.add('menu-open');
     }
   });
+
+  // Lấy tất cả các phần tử có lớp toggle-icon
+  
+    
+

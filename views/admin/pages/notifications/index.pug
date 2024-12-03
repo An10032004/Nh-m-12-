@@ -1,0 +1,279 @@
+extends ../../layouts/default2.pug
+
+block main
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f8f8;
+      }
+      .app-content {
+        padding: 30px;
+      }
+      .content-wrapper-before {
+        height: 120px;
+        background-color: #7367F0;
+      }
+      .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .content-header-title {
+        color: #333;
+        font-size: 24px;
+        margin: 0;
+      }
+      .breadcrumb {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+      .breadcrumb-item {
+        color: #7367F0;
+      }
+      .breadcrumb-item.active {
+        color: #333;
+      }
+      .breadcrumb-item:not(:last-child)::after {
+        content: "/";
+        margin: 0 5px;
+        color: #999;
+      }
+      .card {
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 4px 25px 0 rgba(0,0,0,.1);
+        margin-bottom: 30px;
+      }
+      .card-header {
+        padding: 20px;
+        border-bottom: 1px solid #eeeeee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .card-title {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 500;
+      }
+      .heading-elements {
+        display: flex;
+      }
+      .heading-elements ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+      .heading-elements li {
+        margin-left: 10px;
+      }
+      .heading-elements a {
+        color: #7367F0;
+        text-decoration: none;
+      }
+      .card-content {
+        padding: 20px;
+      }
+      .notification-section {
+        margin-bottom: 20px;
+      }
+      .notification-section h5 {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #333;
+      }
+      .notification-item {
+        padding: 10px;
+        border-bottom: 1px solid #eeeeee;
+      }
+      .notification-item:last-child {
+        border-bottom: none;
+      }
+      .notification-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .notification-time {
+        font-size: 12px;
+        color: #999;
+      }
+      .footer {
+        background-color: #f2f2f2;
+        padding: 15px 20px;
+        font-size: 14px;
+        color: #6B6F82;
+      }
+      .footer .clearfix {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .footer a {
+        color: #333;
+        text-decoration: none;
+      }
+      .footer ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+      .footer li:not(:last-child) {
+        margin-right: 15px;
+      }
+      @media (max-width: 768px) {
+        .content-header, .footer .clearfix {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .breadcrumbs-top, .footer ul {
+          margin-top: 10px;
+        }
+      }
+      .notification-section h5 {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #4a4a4a;
+        border-left: 4px solid #7367F0;
+        padding-left: 10px;
+        }
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #eeeeee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .notification-item:hover {
+            background-color: #f0f4ff;
+        }
+        .notification-title {
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+          .notification-time {
+              font-size: 12px;
+              color: #999;
+              margin-left: auto;
+          }
+          .notification-icon {
+              font-size: 20px;
+              color: #7367F0;
+          } 
+          .notification-icon {
+              font-size: 24px;
+              color: #fff;
+              background-color: #7367F0;
+              padding: 10px;
+              border-radius: 8%;
+              box-shadow: 0 4px 15px rgba(115, 103, 240, 0.4);
+              transition: transform 0.3s ease, box-shadow 0.3s ease;
+          }
+          .notification-item:hover .notification-icon {
+              transform: scale(1.1);
+              box-shadow: 0 6px 20px rgba(115, 103, 240, 0.6);
+          }
+        .icon-posts {
+            background-color: #ff6f61;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 111, 97, 0.4);
+        }
+        .icon-messages {
+            background-color: #28c76f;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(40, 199, 111, 0.4);
+        }
+        .icon-groups {
+            background-color: #00cfe8;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 207, 232, 0.4);
+        }
+      
+    .app-content.content
+        .content-wrapper
+            .content-wrapper-before
+            .content-header.row
+                .content-header-left.col-md-4.col-12.mb-2
+                    h3.content-header-title Icons
+                .content-header-right.col-md-8.col-12
+                    .breadcrumbs-top.float-md-right
+                        .breadcrumb-wrapper.mr-1
+                            ol.breadcrumb
+                                li.breadcrumb-item
+                                    a(href="index.html") Home
+                                li.breadcrumb-item.active Icons
+        .content-body
+          section#line-awesome-icons
+            .row
+              .col-12
+                .card
+                  .card-header
+                    h4.card-title Notifications
+                    a.heading-elements-toggle
+                      i.la.la-ellipsis-v.font-medium-3
+                    .heading-elements
+                      ul.list-inline.mb-0
+                        li
+                          a(data-action="collapse")
+                            i.ft-minus
+                        li
+                          a(data-action="reload")
+                            i.ft-rotate-cw
+                        li
+                          a(data-action="close")
+                            i.ft-x
+                  .card-content.collapse.show
+                    .card-body
+                        .notification-section
+                            i.notification-icon.la.la-user.icon-posts Posts
+                            each item in posts
+                                .notification-item
+                                    .notification-title #{item.title }
+                                    .notification-name uploaded by #{item.userName}  
+                                    .notification-time #{moment(item.DateAt).fromNow()}
+                            
+                            .notification-section
+                            i.notification-icon.la.la-comment.icon-messages  Messages
+                            .notification-item
+                                .notification-title 5 new support tickets
+                                .notification-time 10 minutes ago
+                            .notification-item
+                                .notification-title User feedback received
+                                .notification-time 30 minutes ago
+                            .notification-item
+                                .notification-title Message from team lead
+                                .notification-time 1 hour ago
+                            .notification-section
+                            i.notification-icon.la.la-users.icon-groups  Chat Groups
+                            each item in groups
+                                .notification-item
+                                    .notification-title #{item.name}
+                                    .notification-name created by #{item.creator_id} 
+                                    .notification-time #{moment(item.createdAt).fromNow()}
+                           
+    footer.footer.footer-static.footer-light.navbar-border.navbar-shadow
+      .clearfix.blue-grey.lighten-2.text-sm-center.mb-0.px-2
+        span.float-md-left.d-block.d-md-inline-block
+          | 2018 &copy; Copyright
+          a.text-bold-800.grey.darken-2(href="https://themeselection.com" target="_blank") ThemeSelection
+        ul.list-inline.float-md-right.d-block.d-md-inline-blockd-none.d-lg-block.mb-0
+          li.list-inline-item
+            a.my-1(href="https://themeselection.com/" target="_blank") More themes
+          li.list-inline-item
+            a.my-1(href="https://themeselection.com/support" target="_blank") Support
+          li.list-inline-item
+            a.my-1(href="https://themeselection.com/products/chameleon-admin-modern-bootstrap-webapp-dashboard-html-template-ui-kit/" target="_blank") Purchase
+
+    // Scripts
+    script(src="/theme-assets/vendors/js/vendors.min.js" type="text/javascript")
+    script(src="/theme-assets/js/core/app-menu-lite.js" type="text/javascript")
+    script(src="/theme-assets/js/core/app-lite.js" type="text/javascript")
+

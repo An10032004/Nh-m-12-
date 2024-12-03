@@ -70,6 +70,9 @@ admin_route.get('/ad/logout', adminController.logout)
 admin_route.get('/ad/posts',authMiddleware.requireAuth, adminController.Post)
 admin_route.get('/ad/charts',authMiddleware.requireAuth, adminController.Chart)
 
+
+admin_route.get('/ad/notifications',authMiddleware.requireAuth, adminController.Note)
+
 admin_route.get("/ad/test",adminController.api)
 
 module.exports = admin_route

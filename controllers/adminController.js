@@ -2,6 +2,7 @@ const Account = require("../models/admin/adminModel")
 const Role = require("../models/admin/roleModel")
 const User = require("../models/userModel")
 const Post = require("../models/postModel")
+const Group = require("../models/groupModel")
 const md5 = require('md5');
 module.exports.dashboard = async (req, res) => {
   const users = await User.find({
@@ -192,9 +193,30 @@ module.exports.createPostAccount = async (req, res) => {
        })
     }
 
+
+    module.exports.Note = async (req, res) => {
+      const users = await User.find({
+        deleted:false,
+      })
+      const posts = await Post.find({}).sort({DateAt:-1}).limit(6)
+      const groups = await Group.find({}).sort({createdAt:-1}).limit(6)
+      
+      
+     
+       res.render("admin/pages/notifications/index.pug", {
+          pageTitle: "Notification",
+          users:users,
+          posts:posts,
+          groups:groups
+       })
+    }
+
+
+
+
 module.exports.api = async (req,res) => {
   const accounts = await Account.find({})
-
+  
   res.json(accounts)
 }
    
