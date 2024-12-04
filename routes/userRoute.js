@@ -74,6 +74,11 @@ user_route.post('/group-chat-save',auth.isLogin, userController.saveGroupChat);
 user_route.post('/load-group-chats',auth.isLogin, userController.loadGroupChat); 
 user_route.post('/delete-group-chats',auth.isLogin, userController.deleteGroupChat); 
 
+
+//contact
+user_route.get('/contact',auth.isLogin,userController.contact)
+user_route.post('/contact-post',upload.single('image'),auth.isLogin,userController.contactPost)
+
 //search
 user_route.post('/search',auth.isLogin, userController.searchName); 
 //api check PostMan

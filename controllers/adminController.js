@@ -211,6 +211,23 @@ module.exports.createPostAccount = async (req, res) => {
        })
     }
 
+    module.exports.Map = async (req, res) => {
+      const users = await User.find({
+        deleted:false,
+      })
+      const posts = await Post.find({}).sort({DateAt:-1}).limit(6)
+      const groups = await Group.find({}).sort({createdAt:-1}).limit(6)
+      
+      
+     
+       res.render("admin/pages/map/index.pug", {
+          pageTitle: "Maps",
+          users:users,
+          posts:posts,
+          groups:groups
+       })
+    }
+
 
 
 

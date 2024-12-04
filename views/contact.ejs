@@ -1,0 +1,63 @@
+<%-include('layouts/header.ejs') %>
+
+<style>
+    /* Centering the card within the page */
+    .card {
+        max-width: 600px; /* Set a maximum width */
+        margin-left: 0; /* Align the card to the left */
+        margin-right: auto; /* Keep the right margin auto to maintain centering effect */
+        margin-top: 20px; /* Add some space at the top */
+        padding: 15px; /* Optional: Adjust the padding for better visual appearance */
+    }
+
+    /* Optional: Adjust the form elements to look better */
+    .form-group input, .form-group textarea {
+        width: 100%; /* Make sure input fields take up full width */
+    }
+
+    .form-actions {
+        text-align: left; /* Align the submit button to the left */
+    }
+</style>
+
+<div class="card">
+    <div class="card-content">
+        <div class="card-body">
+            <h4 class="card-title">Contact Form</h4>
+            <h6 class="card-subtitle text-muted">Support card subtitle</h6>
+        </div>
+        <div class="card-body">
+            <form action="/contact-post" method="post" enctype="multipart/form-data" class="form-contact">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="sr-only" for="name">Name</label>
+                        <input id="name" class="form-control" type="text" placeholder="Name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="sr-only" for="email">E-mail</label>
+                        <input id="email" class="form-control" type="email" placeholder="E-mail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="phone">Contact Number</label>
+                        <input id="phone" class="form-control" type="text" placeholder="Phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="message">Message</label>
+                        <textarea id="message" class="form-control square" rows="5" name="message" placeholder="message" required></textarea>
+                    </div>
+                </div>
+                <div class="form-actions center">
+                    <button class="btn btn-outline-primary" type="submit">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <% if(typeof message !== 'undefined'){ %>
+        <div class="success-message">
+          <%= message %>
+        </div>
+      <% } %>
+</div>
+
+<%-include('layouts/footer.ejs') %>

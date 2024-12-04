@@ -5,6 +5,7 @@ const Group = require('../models/groupModel')
 const GroupChat = require('../models/groupChatModel')
 const Post = require('../models/postModel')
 const Member = require('../models/memberModel')
+const Contact = require('../models/contactModel')
 const { MongoMissingCredentialsError } = require('mongodb')
 const { post } = require('../routes/userRoute')
 const mongoose = require('mongoose')
@@ -472,6 +473,37 @@ const deleteGroupChat = async (req, res) => {
     }
 };
 
+const contact = async (req, res) => {
+    try {
+        
+        res.render('contact'); 
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const contactPost = async (req, res) => {
+    
+        const name = req.body.name
+        const email = req.body.email
+        const message = req.body.message
+        const id = req.session.user._id
+        const phone = req.body.phone
+        
+        const contact = new Contact({
+            userName:name,
+            user_id_upload:id,
+            email:email,
+            message:message,
+            phone:phone,
+            DateAt:new Date()
+        })
+        const connects = await contact.save()
+      
+        res.render('contact',{message:'Contact sended'})
+
+};
+
 module.exports = {
     registerload,
     register,
@@ -500,5 +532,6 @@ module.exports = {
     getPost,
     loadPost,
     submitPost,
-   
+    contact,
+    contactPost,
 }
