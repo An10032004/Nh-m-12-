@@ -4,8 +4,8 @@ const contactSchema = new mongoose.Schema({
     userName:String,
     user_id_upload:{
         type:String,
-        required:true
-    },
+        required:true,
+    },   
     email:{
         type:String,
         required:true,
@@ -18,7 +18,7 @@ const contactSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    
+   
     DateAt: { type: Date, default: Date.now }
 
 },

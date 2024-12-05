@@ -3,12 +3,14 @@ const Role = require("../models/admin/roleModel")
 const User = require("../models/userModel")
 const Post = require("../models/postModel")
 const Group = require("../models/groupModel")
+const Contact = require("../models/contactModel")
+const submitContact = require("../models/admin/submitContact")
 const md5 = require('md5');
+const moment = require('moment')
 module.exports.dashboard = async (req, res) => {
   const users = await User.find({
     deleted:false
   })
-  console.log(users)
    res.render("admin/pages/dashboard/index.pug", {
       pageTitle: "trang tổng quan",
       users:users
@@ -229,8 +231,74 @@ module.exports.createPostAccount = async (req, res) => {
     }
 
 
+    module.exports.Contact = async (req, res) => {
+      const users = await User.find({
+        deleted:false,
+      })
+      const contacts = await Contact.find({}).sort({DateAt:-1})
+      const submits = await submitContact.find({})
+  
+    
+      // Log the contacts and submits for debugging
+    console.log("Contacts:", contacts);
+    console.log("Submits:", submits);
 
+    // Prepare an array of userMessageDate timestamps for quick lookup
+    const contactsWithSubmits = contacts.map(contact => {
+      // Convert contact DateAt to a comparable format (without milliseconds)
+      const contactDate = contact.DateAt.toISOString().split('.')[0]; // Remove milliseconds
 
+      // Find the corresponding submit that matches the contact date
+      const matchingSubmit = submits.find(submit => {
+          const submitDate = submit.userMessageDate.toISOString().split('.')[0]; // Remove milliseconds
+          return submitDate === contactDate; // Compare dates
+      });
+
+      // Determine if there is a matching submit and get the adminName and message if it exists
+      const hasSubmit = !!matchingSubmit; // Check if a matching submit was found
+      const adminName = hasSubmit ? matchingSubmit.adminName : null; // Get adminName if exists
+      const messages = hasSubmit ? matchingSubmit.message : null; // Get message if exists
+
+      return {
+          ...contact.toObject(), // Convert Mongoose document to plain object
+          hasSubmit, // Add a flag to indicate if there's a matching submit
+          adminName, // Add adminName to the contact object
+          messages // Add message to the contact object
+      };
+  });
+
+    console.log("Contacts with submits:", contactsWithSubmits);
+       res.render("admin/pages/contacts/index.pug", {
+          pageTitle: "Contact",
+          users:users,
+          contacts: contacts,
+          submits:submits,
+          contactsWithSubmits:contactsWithSubmits
+       })
+    }
+
+    module.exports.submitContact = async (req, res) => {
+      const accounts = await Account.find({deleted:false})
+      const token = req.cookies.token;
+      
+      var obj;
+      for (const account of accounts) {
+        if(account.token == token){
+          obj = account.fullName
+        }
+      }
+      
+      const reply = new submitContact({
+        userMessageDate:req.body.date,
+        message:req.body.message,
+        adminName:obj,
+        DateAt:new Date()
+      })
+      await reply.save()
+
+      res.redirect('/ad/contact')
+    };
+    
 module.exports.api = async (req,res) => {
   const accounts = await Account.find({})
   

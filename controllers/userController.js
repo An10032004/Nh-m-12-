@@ -6,6 +6,7 @@ const GroupChat = require('../models/groupChatModel')
 const Post = require('../models/postModel')
 const Member = require('../models/memberModel')
 const Contact = require('../models/contactModel')
+const submitContact = require('../models/admin/submitContact')
 const { MongoMissingCredentialsError } = require('mongodb')
 const { post } = require('../routes/userRoute')
 const mongoose = require('mongoose')
@@ -489,6 +490,7 @@ const contactPost = async (req, res) => {
         const message = req.body.message
         const id = req.session.user._id
         const phone = req.body.phone
+       
         
         const contact = new Contact({
             userName:name,
@@ -496,10 +498,10 @@ const contactPost = async (req, res) => {
             email:email,
             message:message,
             phone:phone,
-            DateAt:new Date()
+            DateAt:new Date(),
         })
         const connects = await contact.save()
-      
+       
         res.render('contact',{message:'Contact sended'})
 
 };

@@ -1,0 +1,98 @@
+extends ../../layouts/default2.pug
+block main
+
+    | PASTE YOUR HTML CODE HERE
+    style.
+        body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        
+        margin: 0 auto;
+        
+        }
+        h1 {
+        color: #2c3e50;
+        }
+        .feedback-item {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 20px;
+        }
+        .feedback-item h2 {
+        margin-top: 0;
+        color: #3498db;
+        }
+        .feedback-item p {
+        margin: 10px 0;
+        }
+        .feedback-item .email {
+        color: #7f8c8d;
+        font-style: italic;
+        }
+        .reply {
+        background-color: #e8f4f8;
+        border-left: 3px solid #3498db;
+        padding: 10px;
+        margin-top: 10px;
+        }
+        .reply-form {
+        margin-top: 15px;
+        }
+        .reply-form textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        resize: vertical;
+        }
+        .reply-form button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        }
+        .reply-form button:hover {
+        background-color: #2980b9;
+        }
+        @media (max-width: 600px) {
+        body {
+        padding: 10px;
+        }
+        }
+        .feedback-list{
+            margin:30px;
+        }
+    .app-content
+        header
+        h1 Admin Feedback Interface
+        main
+        section.feedback-list(style="background-color: #f5f5f5; border-radius: 5px; padding: 20px;")
+            //- article.feedback-item
+            //- h2 John Doe
+            //- p.email john@example.com
+            //- p Great service! I&apos;m really impressed with the quality of your products.
+            //- .reply
+            //-     h3 Admin Reply:
+            //-     p Thank you for your kind words, John! We&apos;re glad you&apos;re enjoying our products.
+            each item in contactsWithSubmits
+                article.feedback-item(style="background-color: #e8e8e8; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin-bottom: 20px;")
+                h2 From user: #{item.userName}
+                p.email(style="color: #3498db;") #{item.email}. Phone: #{item.phone}
+                p
+                    | #{item.message}
+                if item.hasSubmit === true
+                    .reply 
+                       p #{item.messages}
+                else 
+                    form.reply-form(action=`/ad/submitContact` method="POST" enctype="multipart/form-data")
+                        
+                        textarea(style="resize: none;border: none; overflow: hidden;padding: 10px;background-color: #f2f2f2;font-family: Arial, sans-serif;font-size: 16px; " name="date" id="date") #{item.DateAt}
+                        textarea(id="message" rows='4' placeholder='Type your reply here...'  name="message")
+                        button(type='submit' style="background-color: #2980b9; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; ") Send Reply
+                    

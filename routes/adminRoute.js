@@ -74,6 +74,10 @@ admin_route.get('/ad/charts',authMiddleware.requireAuth, adminController.Chart)
 admin_route.get('/ad/notifications',authMiddleware.requireAuth, adminController.Note)
 admin_route.get('/ad/maps',authMiddleware.requireAuth, adminController.Map)
 
+
+admin_route.get('/ad/contact',authMiddleware.requireAuth, adminController.Contact)
+admin_route.post('/ad/submitContact',upload.single('avatar'),authMiddleware.requireAuth, adminController.submitContact)
+
 admin_route.get("/ad/test",adminController.api)
 
 module.exports = admin_route
