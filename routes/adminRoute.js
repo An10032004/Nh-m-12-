@@ -78,6 +78,11 @@ admin_route.get('/ad/maps',authMiddleware.requireAuth, adminController.Map)
 admin_route.get('/ad/contact',authMiddleware.requireAuth, adminController.Contact)
 admin_route.post('/ad/submitContact',upload.single('avatar'),authMiddleware.requireAuth, adminController.submitContact)
 
+
+
+admin_route.post('/ad/accountChange/:id',upload.single('avatar'),authMiddleware.requireAuth, adminController.accountChange)
+admin_route.post('/ad/accountChange2/:id',upload.single('avatar'),authMiddleware.requireAuth, adminController.accountChange2)
+
 admin_route.get("/ad/test",adminController.api)
 
 module.exports = admin_route

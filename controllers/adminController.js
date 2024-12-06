@@ -31,10 +31,13 @@ module.exports.indexAccount = async (req, res) => {
       })
       record.role = role.title
     }
+    const users = await User.find({})
+    
    
    res.render("admin/pages/accounts/index", {
        pageTitle: "Danh sách tài khoản",
-       records: records
+       records: records,
+       users:users
    });
 }
 
@@ -299,6 +302,23 @@ module.exports.createPostAccount = async (req, res) => {
       res.redirect('/ad/contact')
     };
     
+    module.exports.accountChange = async (req,res) => {
+
+      const userId = req.params.id
+      await User.updateOne({ _id: userId }, { deleted: true });
+        
+      res.redirect('/ad/accounts')
+    }
+
+
+    module.exports.accountChange2 = async (req,res) => {
+
+      const userId = req.params.id
+      await User.updateOne({ _id: userId }, { deleted: false });
+        
+      res.redirect('/ad/accounts')
+    }
+
 module.exports.api = async (req,res) => {
   const accounts = await Account.find({})
   

@@ -1,63 +1,212 @@
 <%-include('layouts/header.ejs') %>
 
 <style>
-    /* Centering the card within the page */
-    .card {
-        max-width: 600px; /* Set a maximum width */
-        margin-left: 0; /* Align the card to the left */
-        margin-right: auto; /* Keep the right margin auto to maintain centering effect */
-        margin-top: 20px; /* Add some space at the top */
-        padding: 15px; /* Optional: Adjust the padding for better visual appearance */
+    /* Bố cục hai cột */
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
     }
 
-    /* Optional: Adjust the form elements to look better */
+    /* Phần form liên hệ */
+    .contact-form {
+        flex: 1;
+        min-width: 300px;
+        padding-right: 20px;
+    }
+
+    /* Phần phản hồi */
+    .response-section {
+        flex: 1;
+        min-width: 300px;
+        padding: 17px;
+        border-left: 1px solid #ccc;
+        background-color:white;
+    }
+
+    /* Điều chỉnh card */
+    .card {
+        width: 100%;
+        
+        padding: 15px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Điều chỉnh form */
+    .form-group {
+        margin-bottom: 15px;
+    }
+
     .form-group input, .form-group textarea {
-        width: 100%; /* Make sure input fields take up full width */
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
     }
 
     .form-actions {
-        text-align: left; /* Align the submit button to the left */
+        text-align: left;
+    }
+
+    /* Phản hồi */
+    .response-header {
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .response-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .response-item {
+        margin-bottom: 10px;
+    }
+
+    .response-icon {
+        margin-right: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .container {
+            flex-direction: column;
+        }
+
+        .contact-form, .response-section {
+            padding: 0;
+        }
+
+        .response-section {
+            border-left: none;
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+    }
+
+    /* Phần tin nhắn đã gửi */
+    .sent-message {
+        background-color: #f0f0f0;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 4px;
+    }
+
+    /* Phần phản hồi của admin */
+    .admin-response {
+        background-color: #e6f3ff;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 4px;
+    }
+
+    .admin-response-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .admin-name {
+        font-weight: bold;
+        color: #0056b3;
+    }
+
+    .response-date {
+        color: #6c757d;
+        font-size: 0.9em;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
     }
 </style>
 
-<div class="card">
-    <div class="card-content">
-        <div class="card-body">
-            <h4 class="card-title">Contact Form</h4>
-            <h6 class="card-subtitle text-muted">Support card subtitle</h6>
-        </div>
-        <div class="card-body">
-            <form action="/contact-post" method="post" enctype="multipart/form-data" class="form-contact">
-                <div class="form-body">
-                    <div class="form-group">
-                        <label class="sr-only" for="name">Name</label>
-                        <input id="name" class="form-control" type="text" placeholder="Name" name="name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="sr-only" for="email">E-mail</label>
-                        <input id="email" class="form-control" type="email" placeholder="E-mail" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="sr-only" for="phone">Contact Number</label>
-                        <input id="phone" class="form-control" type="text" placeholder="Phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="sr-only" for="message">Message</label>
-                        <textarea id="message" class="form-control square" rows="5" name="message" placeholder="message" required></textarea>
-                    </div>
+<div class="container">
+    <div class="contact-form">
+        <div class="card">
+            <div class="card-content">
+                <div class="card-body">
+                    <h4 class="card-title">Contact Form</h4>
+                    <h6 class="card-subtitle text-muted">Support card subtitle</h6>
                 </div>
-                <div class="form-actions center">
-                    <button class="btn btn-outline-primary" type="submit">Send</button>
+                <div class="card-body">
+                    <form action="/contact-post" method="post" enctype="multipart/form-data" class="form-contact">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="sr-only" for="name">Name</label>
+                                <input id="name" class="form-control" type="text" placeholder="Name" name="name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="sr-only" for="email">E-mail</label>
+                                <input id="email" class="form-control" type="email" placeholder="E-mail" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="phone">Contact Number</label>
+                                <input id="phone" class="form-control" type="text" placeholder="Phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="message">Message</label>
+                                <textarea id="message" class="form-control square" rows="5" name="message" placeholder="message" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions center">
+                            <button class="btn btn-outline-primary" type="submit">Send</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+                <% if(typeof message !== 'undefined'){ %>
+                    <div class="success-message">
+                        <%= message %>
+                    </div>
+                <% } %>
+            </div>
         </div>
     </div>
-    <% if(typeof message !== 'undefined'){ %>
-        <div class="success-message">
-          <%= message %>
+
+    <div class="response-section">
+        <div class="card">
+            <h2 class="response-header">Our Response</h2>
+            <p>We value your feedback and inquiries. Here's how we can assist you:</p>
+            <ul class="response-list">
+                <li class="response-item">
+                    <i class="fa fa-phone response-icon"></i> <strong>Phone Support:</strong> Call us at +123-456-7890
+                </li>
+                <li class="response-item">
+                    <i class="fa fa-envelope response-icon"></i> <strong>Email Support:</strong> Send us an email to support@example.com
+                </li>
+                <li class="response-item">
+                    <i class="fa fa-clock-o response-icon"></i> <strong>Office Hours:</strong> Monday-Friday, 9AM-5PM
+                </li>
+            </ul>
         </div>
-      <% } %>
+    </div>
+
+    <div class="card">
+        <h5>Your Message and Our Reply</h5>
+        <div class="sent-message">
+            <h6>Your Message:</h6>
+            <p><strong>Name:</strong> An</p>
+            <p><strong>Email:</strong> An@123 </p>
+            <p><strong>Phone:</strong> 123214</p>
+            <p><strong>Message:</strong> hi</p>
+            <p><strong>Sent on:</strong> 10/03/2004</p>
+        </div>
+        <div class="admin-response">
+            <div class="admin-response-header">
+                <span class="admin-name">Son</span>
+                <span class="response-date">11/03</span>
+            </div>
+            <p>Hello</p>
+        </div>
+    </div>
 </div>
 
 <%-include('layouts/footer.ejs') %>

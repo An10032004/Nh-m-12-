@@ -52,7 +52,8 @@ const login = async(req,res) => {
 
         const userData = await User.findOne({
             email:email,
-            password:password
+            password:password,
+            deleted:false
         })
         
         if(userData){

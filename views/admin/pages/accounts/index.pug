@@ -1,12 +1,99 @@
 extends ../../layouts/default2.pug
 
 block main
+  style.
+    .user-profiles-slider {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: flex-start;
+      }
+
+      .user-profile {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.5rem;
+        width: calc(25% - 1rem);
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .user-profile:hover {
+        transform: translateY(-5px);
+      }
+
+      .user-avatar img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 3px solid #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .user-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .user-email {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+      }
+
+      .user-status {
+        font-size: 0.9rem;
+        font-weight: bold;
+        padding: 0.25rem 0.5rem;
+        border-radius: 20px;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+      }
+
+      .status-active {
+        background-color: #28a745;
+        color: #fff;
+      }
+
+      .status-inactive {
+        background-color: #dc3545;
+        color: #fff;
+      }
+
+      @media (max-width: 1200px) {
+        .user-profile {
+          width: calc(33.33% - 1rem);
+        }
+      }
+
+      @media (max-width: 992px) {
+        .user-profile {
+          width: calc(50% - 1rem);
+        }
+      }
+
+      @media (max-width: 576px) {
+        .user-profile {
+          width: 100%;
+        }
+      }
+
+
+
+
+
   if(role.permissions.includes("accounts_view"))  
     .app-content
       h1(class="mb-4") Danh sách tài khoản
 
       .card.mb-3
-        .card-header Danh sách
+        .card-header Danh sách admin accounts
         .card-body
           .row
             .col-8
@@ -71,6 +158,33 @@ block main
                           button(
                               class="btn btn-danger btn-sm ml-1"
                           ) Xóa
+      .card.mt-5
+        .card-header Danh sách người dùng
+        .card-body
+          .user-profiles-slider
+            each user in users
+              .user-profile
+                .user-avatar
+                  img(src='/'+user.image alt=user.name)
+                .user-info
+                  h3.user-name= user.name
+                  p.user-email= user.email
+                  
+                  if user.is_online === "1"
+                    span.green #{"online"}
+                  else 
+                    span.grey #{"offline"}
+                if(role.permissions.includes("accounts_delete"))
+                  if(user.deleted == false)
+                    form(action=`/ad/accountChange/${user._id}` method="post" enctype="multipart/form-data")
+                      
+                      button(type="submit").btn.btn-danger.btn-sm.mt-2 Buộc dừng
+                  else 
+                    button.btn.btn-sm.mt-2.gray  Tài khoản này đã bị khóa
+                    form(action=`/ad/accountChange2/${user._id}` method="post" enctype="multipart/form-data")
+                      
+                      button(type="submit").btn.btn-success.btn-sm.mt-2 Khôi phục
+                  
   else 
     | You are not in permissions
 
