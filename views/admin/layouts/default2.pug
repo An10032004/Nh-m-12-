@@ -167,18 +167,10 @@ head
                   a.dropdown-item.notification-item(href='#' data-notification-id='1')
                     i.ft-mail.notification-icon
                     span.notification-title New message received
-                    small.text-muted.notification-time 
-                  ul 
-                      .notification-item
-                        .notification-title 5 new support tickets
-                        .notification-time 10 minutes ago
-                      .notification-item
-                          .notification-title User feedback received
-                          .notification-time 30 minutes ago
-                      .notification-item
-                          .notification-title Message from team lead
-                          .notification-time 1 hour ago
-                    
+                  //- each item in contacts
+                  //-   .notification-item
+                  //-     .notification-title #{item.message}
+                  //-     .notification-time #{moment(item.createdAt).fromNow()}       
                   a.dropdown-item.notification-item(href='#' data-notification-id='2')
                     i.ft-bookmark.notification-icon
                     span.notification-title New Posts created

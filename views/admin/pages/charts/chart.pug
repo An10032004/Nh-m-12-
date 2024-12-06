@@ -107,7 +107,31 @@ block main
               .col-md-6.col-sm-12
                 .card
                   .card-header
-                    h4.card-title Simple Pie Chart
+                    h4.card-title PostsPerDay Pie Chart
+                    a.heading-elements-toggle
+                      i.la.la-ellipsis-v.font-medium-3
+                    .heading-elements
+                      ul.list-inline.mb-0
+                        li
+                          a(data-action='collapse')
+                            i.ft-minus
+                        li
+                          a(data-action='reload')
+                            i.ft-rotate-cw
+                        li
+                          a(data-action='expand')
+                            i.ft-maximize
+                        li
+                          a(data-action='close')
+                            i.ft-x
+                  .card-content.collapse.show
+                    .card-body
+                      .height-400
+                        canvas#simple2-pie-chart
+              .col-md-6.col-sm-12
+                .card
+                  .card-header
+                    h4.card-title AccountsPerDay Pie Chart
                     a.heading-elements-toggle
                       i.la.la-ellipsis-v.font-medium-3
                     .heading-elements
@@ -128,6 +152,30 @@ block main
                     .card-body
                       .height-400
                         canvas#simple-pie-chart
+              .col-md-6.col-sm-12
+                .card
+                  .card-header
+                    h4.card-title chatsPerDay Pie Chart
+                    a.heading-elements-toggle
+                      i.la.la-ellipsis-v.font-medium-3
+                    .heading-elements
+                      ul.list-inline.mb-0
+                        li
+                          a(data-action='collapse')
+                            i.ft-minus
+                        li
+                          a(data-action='reload')
+                            i.ft-rotate-cw
+                        li
+                          a(data-action='expand')
+                            i.ft-maximize
+                        li
+                          a(data-action='close')
+                            i.ft-x
+                  .card-content.collapse.show
+                    .card-body
+                      .height-400
+                        canvas#simple3-pie-chart
               // Simple Doughnut Chart
               .col-md-6.col-sm-12
                 .card
@@ -153,6 +201,7 @@ block main
                     .card-body
                       .height-400
                         canvas#simple-doughnut-chart
+
           // // Pie charts section end
     // ////////////////////////////////////////////////////////////////////////////
     footer.footer.footer-static.footer-light.navbar-border.navbar-shadow

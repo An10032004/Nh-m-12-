@@ -206,13 +206,14 @@ module.exports.createPostAccount = async (req, res) => {
       const posts = await Post.find({}).sort({DateAt:-1}).limit(6)
       const groups = await Group.find({}).sort({createdAt:-1}).limit(6)
       
-      
+      const contacts = await Contact.find({}).sort({createdAt:-1}).limit(3)
      
        res.render("admin/pages/notifications/index.pug", {
           pageTitle: "Notification",
           users:users,
           posts:posts,
-          groups:groups
+          groups:groups,
+          contacts:contacts
        })
     }
 

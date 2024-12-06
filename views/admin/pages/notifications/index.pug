@@ -242,15 +242,11 @@ block main
                             
                             .notification-section
                             i.notification-icon.la.la-comment.icon-messages  Messages
-                            .notification-item
-                                .notification-title 5 new support tickets
-                                .notification-time 10 minutes ago
-                            .notification-item
-                                .notification-title User feedback received
-                                .notification-time 30 minutes ago
-                            .notification-item
-                                .notification-title Message from team lead
-                                .notification-time 1 hour ago
+                            each item in contacts
+                              .notification-item                           
+                                  .notification-title #{item.message}
+                                  .notification-name send by #{item.userName} 
+                                  .notification-time #{moment(item.createdAt).fromNow()}
                             .notification-section
                             i.notification-icon.la.la-users.icon-groups  Chat Groups
                             each item in groups

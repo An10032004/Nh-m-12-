@@ -10,8 +10,7 @@ $(window).on("load", async function() {
 
     const dataFromDB = await fetchData();
 
-    // Kiểm tra dữ liệu đã nhận
-    console.log(dataFromDB);
+    
 
     // Sử dụng labels là các ngày trong tuần
     const labels = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
