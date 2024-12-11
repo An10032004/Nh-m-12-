@@ -81,9 +81,46 @@ user_route.post('/contact-post',upload.single('image'),auth.isLogin,userControll
 
 //search
 user_route.post('/search',auth.isLogin, userController.searchName); 
+
+
+//games
+games = {};
+user_route.get('/games',auth.isLogin,userController.Game)
+user_route.get('/white',auth.isLogin, (req, res) => {
+    res.render('ingame', {
+        color: 'white'
+    });
+});
+user_route.get('/black',auth.isLogin, (req, res) => {
+    console.log(games[req.query.code])
+    if (!games[req.query.code]) {
+        return res.redirect('/?error=invalidCode');
+    }
+
+
+
+    res.render('ingame', {
+        color: 'black'
+    });
+});
+
+
+
+
+user_route.get('/game2',auth.isLogin,(req,res) => {
+    res.render('game2')
+})
+user_route.get('/game3',auth.isLogin,(req,res) => {
+    res.render('game3')
+})
+
+
+
 //api check PostMan
 user_route.get('/testApi',userController.getApi)
 user_route.patch('/updateApi',userController.editApi)
+
+
 
 
 module.exports = user_route

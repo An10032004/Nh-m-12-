@@ -304,10 +304,9 @@ const deleteChatGroup = async (req,res) => {
 }
 
 const getApi = async (req,res) =>{
-    const user = await User.find({
-        is_online:'0'
-    })
-    res.json(user)
+    const chats = await Group.find({})
+
+    res.json(chats)
 }
 const editApi = async (req,res) =>{
         const id = "672628466f20caa2d3e2606d"
@@ -477,8 +476,41 @@ const deleteGroupChat = async (req, res) => {
 
 const contact = async (req, res) => {
     try {
-        
-        res.render('contact'); 
+        const contacts = await Contact.find({user_id_upload:req.session.user._id}).sort({DateAt:-1})
+        const submits = await submitContact.find({})
+    
+      
+       
+  
+      // Prepare an array of userMessageDate timestamps for quick lookup
+      const contactsWithSubmits = contacts.map(contact => {
+        // Convert contact DateAt to a comparable format (without milliseconds)
+        const contactDate = contact.DateAt.toISOString().split('.')[0]; // Remove milliseconds
+  
+        // Find the corresponding submit that matches the contact date
+        const matchingSubmit = submits.find(submit => {
+            const submitDate = submit.userMessageDate.toISOString().split('.')[0]; // Remove milliseconds
+            return submitDate === contactDate; // Compare dates
+        });
+  
+        // Determine if there is a matching submit and get the adminName and message if it exists
+        const hasSubmit = !!matchingSubmit; // Check if a matching submit was found
+        const adminName = hasSubmit ? matchingSubmit.adminName : null; // Get adminName if exists
+        const messages = hasSubmit ? matchingSubmit.message : null; // Get message if exists
+        const Date = hasSubmit ? matchingSubmit.DateAt : null; // Get message if exists
+  
+        return {
+            ...contact.toObject(), // Convert Mongoose document to plain object
+            hasSubmit, // Add a flag to indicate if there's a matching submit
+            adminName, // Add adminName to the contact object
+            messages, // Add message to the contact object
+            Date
+        };
+    });
+    console.log(contactsWithSubmits)
+        res.render('contact',{contacts: contacts,
+            submits:submits,
+            contactsWithSubmits:contactsWithSubmits}); 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -505,6 +537,11 @@ const contactPost = async (req, res) => {
        
         res.render('contact',{message:'Contact sended'})
 
+};
+
+
+const Game = async (req, res) => {
+    res.render('game')
 };
 
 module.exports = {
@@ -537,4 +574,5 @@ module.exports = {
     submitPost,
     contact,
     contactPost,
+    Game,
 }

@@ -1,4 +1,5 @@
 <%- include('layouts/header.ejs') %>
+<link rel="stylesheet" href="/css/dashboard.css">
 
 <form action="/search" method="post" class="form-inline my-2 my-lg-0" id="searchForm" class="search-form"><input class="form-control" type="text" name="name" id="name" placeholder="Search" aria-label="Search"  /><button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></form>  
 
@@ -20,11 +21,11 @@
       <% }) %>
     </ul>
     <% } else { %>
-    <p>The people you want to find are not existing</p>
+    <p style="color: white;">The people you want to find are not existing</p>
     <% } %>
   </div>
 
-  <div class="chat-section">
+  <div class="chat-section" style="width:90%">
     <h3 class="start-head">Click to start chat</h3>
     <div class="chat-container">
     </div>

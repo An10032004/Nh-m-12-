@@ -189,24 +189,36 @@
         </div>
     </div>
 
-    <div class="card">
+    <% 
+        for(let i = 0 ; i < contactsWithSubmits.length;i++){
+            %>
+            <div class="card">
         <h5>Your Message and Our Reply</h5>
         <div class="sent-message">
             <h6>Your Message:</h6>
-            <p><strong>Name:</strong> An</p>
-            <p><strong>Email:</strong> An@123 </p>
-            <p><strong>Phone:</strong> 123214</p>
-            <p><strong>Message:</strong> hi</p>
-            <p><strong>Sent on:</strong> 10/03/2004</p>
+            <p><strong>Name:</strong> <%= contactsWithSubmits[i]['userName']%></p>
+            <p><strong>Email:</strong> <%= contactsWithSubmits[i]['email']%> </p>
+            <p><strong>Phone:</strong> <%= contactsWithSubmits[i]['phone']%></p>
+            <p><strong>Message:</strong> <%= contactsWithSubmits[i]['message']%></p>
+            <p><strong>Sent on:</strong> <%= moment(contactsWithSubmits[i]['DateAt']).fromNow()%></p>
         </div>
-        <div class="admin-response">
-            <div class="admin-response-header">
-                <span class="admin-name">Son</span>
-                <span class="response-date">11/03</span>
-            </div>
-            <p>Hello</p>
-        </div>
+        <%  
+            if(contactsWithSubmits[i]['hasSubmit'] === true){
+                %>
+                <div class="admin-response">
+                    <div class="admin-response-header">
+                        <span class="admin-name"><%= contactsWithSubmits[i]['adminName']%></span>
+                        <span class="response-date"><%= moment(contactsWithSubmits[i]['Date']).fromNow()%></span>
+                    </div>
+                    <p><%= contactsWithSubmits[i]['messages']%></p>
+                </div>
+                <%
+            }
+        %>
     </div>
+            <%
+        }
+    %>
 </div>
 
 <%-include('layouts/footer.ejs') %>

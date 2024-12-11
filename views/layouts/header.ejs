@@ -15,6 +15,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js" integrity="sha512-VJ6+sp2E5rFQk05caiXXzQd1wBABpjEj1r5kMiLmGAAgwPItw1YpqsCCBtq8Yr1x6C49/mTpRdXtq8O2RcZhlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/chessboard-1.0.0.min.css" />
+  <script src="/js/chessboard-1.0.0.min.js"></script>
+  <script src="/js/chess-0.10.3.min.js"></script>
   </head>
   <body>
 		<link rel="stylesheet" href="/css/header.css">
@@ -33,6 +36,102 @@
           box-shadow: 0 0 10px rgba(0,0,0,0.1);
           z-index: 1000;
       }
+      .notification-icon {
+  position: relative;
+}
+
+.notification-icon i {
+  font-size: 30px;
+  color: #fff;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 15px;
+
+  background-color: #ff0000;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 10px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.dropdown {
+    display: none; /* Ẩn dropdown mặc định */
+    position: absolute;
+    background-color: white;
+    min-width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 5px;
+    margin-top: 10px;
+    animation: fadeIn 0.3s; /* Hiệu ứng fade in */
+}
+
+.notification-container:hover .dropdown {
+    display: block; /* Hiện dropdown khi hover */
+}
+
+.dropdown-item {
+    display: flex; /* Sử dụng flexbox để căn chỉnh */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.3s;
+    max-height: 300px;
+    max-width: 400px;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none; /* Không có đường viền cho item cuối cùng */
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0; /* Màu nền khi hover */
+}
+
+.avatar {
+    width: 40px; /* Kích thước avatar */
+    height: 40px; /* Kích thước avatar */
+    border-radius: 50%; /* Hình tròn */
+    margin-right: 10px; /* Khoảng cách giữa avatar và nội dung */
+}
+
+.notification-content {
+    flex-grow: 1; /* Cho phép nội dung chiếm không gian còn lại */
+}
+
+.notification-content strong {
+    color: #333; /* Màu chữ cho tên người dùng */
+}
+
+.notification-content p {
+    margin: 0; /* Xóa margin cho paragraph */
+    color: #555; /* Màu chữ cho nội dung thông báo */
+    font-size: 14px; /* Kích thước chữ cho nội dung */
+}
+
+/* Hiệu ứng fade in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
   </style>
 		<div class="wrapper d-flex align-items-stretch " style="background-color: #3A3B3C">
 			<nav id="sidebar" style="border-top-left-radius: 9%;border-top-right-radius: 9%;max-width: 113px;min-width: 136px;margin-top:0px">
@@ -64,6 +163,11 @@
           </li>
          
           <li class="active">
+            <a href="/games"><span class="fa fa-gamepad mr-3"></span></a>
+          </li>
+
+
+          <li class="active">
             <a href="/contact"><span class="fa fa-address-book mr-3"></span></a>
           </li>
          
@@ -82,23 +186,26 @@
         <!-- New header menu -->
         <div class="header-menu">
           <ul class="header-nav">
-            <li><a href="#"><span class="fa fa-home"></span> Home</a></li>
-            <li><a href="#"><span class="fa fa-envelope"></span> Messages</a></li>
+            <li><a href="/dashboard"><span class="fa fa-home"></span> Home</a></li>
+            <li><a href="/dashboard"><span class="fa fa-envelope"></span> Messages</a></li>
             <li><a href="#"><span class="fa fa-cog"></span> Settings</a></li>
           </ul>
           <div class="notification-icon">
             <i class="fa fa-bell" style="color:white"></i>
-            <span class="notification-badge">3</span>
+            <span class="notification-badge"><%=count %></span>
             <div class="dropdown" id="notificationDropdown">
+              
+                
+            <% post.forEach(function(p) { %>
               <div class="dropdown-item">
-                <strong>John Doe:</strong> Hey, how are you?
+                <a href="/posts">
+                <img src="<%= p.image %>" class="avatar">
+                <strong><%= p.userName%> has uploaded: </strong> <%= p.content%>
+               </a>
               </div>
-              <div class="dropdown-item">
-                <strong>Jane Smith:</strong> Meeting at 3 PM
-              </div>
-              <div class="dropdown-item">
-                <strong>Mike Johnson:</strong> Don't forget about...
-              </div>
+          <% }); %>
+                  
+              
             </div>
           </div>
           <div class="user-menu">
@@ -106,7 +213,7 @@
             <div class="dropdown" id="userDropdown">
               <div class="dropdown-item">Profile</div>
               <div class="dropdown-item">Settings</div>
-              <div class="dropdown-item">Logout</div>
+              <div class="dropdown-item"><a href="/logout">Logout</a></div>
             </div>
           </div>
         </div>
@@ -216,6 +323,43 @@
               askNextQuestion();
             });
           });
+
+          document.addEventListener('DOMContentLoaded', function() {
+  // Select elements
+  const notificationIcon = document.querySelector('.notification-icon');
+  const userMenu = document.querySelector('.user-menu');
+  const notificationDropdown = document.getElementById('notificationDropdown');
+  const userDropdown = document.getElementById('userDropdown');
+
+  // Function to toggle dropdown visibility
+  function toggleDropdown(dropdown) {
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Function to close all dropdowns
+  function closeAllDropdowns() {
+    notificationDropdown.style.display = 'none';
+    userDropdown.style.display = 'none';
+  }
+
+  // Add click event listener to notification icon
+  notificationIcon.addEventListener('click', function(event) {
+    event.stopPropagation();
+    toggleDropdown(notificationDropdown);
+    userDropdown.style.display = 'none';
+  });
+
+  // Add click event listener to user menu
+  userMenu.addEventListener('click', function(event) {
+    event.stopPropagation();
+    toggleDropdown(userDropdown);
+    notificationDropdown.style.display = 'none';
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', closeAllDropdowns);
+});
+
         </script>
 
         <style>

@@ -1,0 +1,40 @@
+<%-include('layouts/header.ejs') %>
+<style>body {
+    background-color: #333; /* Màu nền tối */
+    text-align: center; /* Đưa nội dung ra giữa màn hình */
+    color: #fff; /* Đổi màu chữ thành trắng */
+}
+
+#myBoard {
+    margin: 0 auto; /* Đưa phần tử ra giữa màn hình */
+    background-color: #fff; /* Màu nền trắng cho phần tử */
+    padding: 20px; /* Khoảng cách trong phần tử */
+    border: 1px solid #ddd; /* Viền cho phần tử */
+    border-radius: 10px; /* Bo góc cho phần tử */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng cho phần tử */
+}
+
+label {
+    font-weight: bold; /* Đổi font chữ thành đậm */
+    margin-bottom: 10px; /* Khoảng cách dưới label */
+}
+
+#status, #pgn {
+    margin-bottom: 20px; /* Khoảng cách dưới phần tử */
+    padding: 10px; /* Khoảng cách trong phần tử */
+    border: 1px solid #ddd; /* Viền cho phần tử */
+    border-radius: 10px; /* Bo góc cho phần tử */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng cho phần tử */
+}</style>
+<div id="myBoard" style="width: 700px;"></div>
+<label>Status:</label>
+<div id="status"></div>
+<label>PGN:</label>
+<div id="pgn"></div>
+
+<script>
+    let playerColor = '<%= color %>';
+    console.log('Playing as ' + playerColor);
+</script>
+
+<%-include('layouts/footer.ejs') %>
