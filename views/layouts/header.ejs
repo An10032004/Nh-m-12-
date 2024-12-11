@@ -132,6 +132,136 @@
         opacity: 1;
     }
 }
+
+:root {
+  --sidebar-width: 400px;
+  --primary-color: #4CAF50;
+  --secondary-color: #2196F3;
+  --background-color: #f1f1f1;
+  --text-color: #333;
+  --hover-color: #e0e0e0;
+}
+
+.sidebarRight {
+  position: fixed;
+  right: calc(var(--sidebar-width) * -1);
+  top: 0;
+  width: var(--sidebar-width);
+  height: 100%;
+  background-color: var(--background-color);
+  transition: 0.5s ease-in-out;
+  padding: 30px;
+  box-sizing: border-box;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  z-index: 9999;
+}
+
+.sidebarRight.open {
+  right: 0;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 45px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  transition: 0.3s;
+  z-index: 999;
+}
+
+.close-btn:hover {
+  color: var(--primary-color);
+  transform: rotate(90deg);
+}
+
+
+
+
+.user-info {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.user-info:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.user-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  border: 5px solid var(--primary-color);
+  transition: 0.3s;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  border-color: var(--secondary-color);
+}
+
+.user-info h2 {
+  color: var(--primary-color);
+  margin-bottom: 5px;
+}
+
+.user-info p {
+  color: var(--text-color);
+  font-style: italic;
+}
+
+.user-posts {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  overflow-x: hidden;
+  max-height: calc(100% - 300px);
+}
+
+.post {
+  background-color: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.post:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.post h4 {
+  color: var(--secondary-color);
+  margin-bottom: 10px;
+}
+
+.post p {
+  color: var(--text-color);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sidebarRight.open .user-info,
+.sidebarRight.open .post {
+  animation: fadeIn 0.5s ease-out;
+}
   </style>
 		<div class="wrapper d-flex align-items-stretch " style="background-color: #3A3B3C">
 			<nav id="sidebar" style="border-top-left-radius: 9%;border-top-right-radius: 9%;max-width: 113px;min-width: 136px;margin-top:0px">
@@ -180,6 +310,24 @@
 
     	</nav>
       
+      <div class="sidebarRight" id="sidebarRight">
+        <button class="close-btn" id="closeBtn">&times;</button>
+        <div class="user-info">
+          <img src="<%= user.image%>" alt="User Avatar" class="user-avatar">
+          <h2><%= user.name %></h2>
+          <p><%= user.email %></p>
+        </div>
+        <div class="user-posts">
+          <h3>Bài đăng</h3>
+          <% post.forEach(function(p) { %>
+            <div class="post">
+              <h4><%= p.title %></h4>
+              <p><%= p.content %></p>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+
         <!-- Page Content  -->
       <div id="content" class="">
 
@@ -211,13 +359,13 @@
           <div class="user-menu">
             <img src="<%= user.image %>" alt="<%= user.name %>">
             <div class="dropdown" id="userDropdown">
-              <div class="dropdown-item">Profile</div>
-              <div class="dropdown-item">Settings</div>
+              <button class="dropdown-item open-btn" id="openBtn">Profile</button>
+               <div class="dropdown-item">Settings</div>
               <div class="dropdown-item"><a href="/logout">Logout</a></div>
             </div>
           </div>
         </div>
-
+       
         <div id="ai-assistant" class="ai-assistant">
           
           <div class="ai-bubble">
@@ -267,6 +415,9 @@
                   </div>
               </form>
           </div>
+
+
+          
       </div>
         <!-- Your existing content goes here -->
 
@@ -359,7 +510,19 @@
   // Close dropdowns when clicking outside
   document.addEventListener('click', closeAllDropdowns);
 });
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebar = document.getElementById('sidebarRight');
+  const openBtn = document.getElementById('openBtn');
+  const closeBtn = document.getElementById('closeBtn');
 
+  openBtn.addEventListener('click', function() {
+    sidebar.classList.add('open');
+  });
+
+  closeBtn.addEventListener('click', function() {
+    sidebar.classList.remove('open');
+  });
+});
         </script>
 
         <style>
@@ -378,5 +541,6 @@
 
   }
         </style>
+       
 <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
 

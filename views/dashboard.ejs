@@ -1,10 +1,96 @@
 <%-include('layouts/header.ejs') %>
 <link rel="stylesheet" href="/css/dashboard.css">
 <style>
-  /* Chat Section Styles */
   
-</style>
+  /* Existing styles */
 
+  /* User Sidebar Styles */
+  .user-sidebar {
+    position: fixed;
+    right: -300px;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #f8f9fa;
+    transition: 0.3s;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 1000;
+    overflow-y: auto;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  }
+  .chat-section {
+    transition: 0.3s;
+    width: 100%;
+  }
+  .sidebar-open .chat-section {
+    width: calc(100% - 300px);
+  }
+  .user-sidebar.open {
+    right: 0;
+    
+  }
+  
+  .user-sidebar .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #333;
+  }
+
+  .user-sidebar .user-info {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .user-sidebar .user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+
+  .user-sidebar h2 {
+    margin: 10px 0;
+    color: #333;
+  }
+
+  .user-sidebar p {
+    margin: 5px 0;
+    color: #666;
+  }
+
+  .user-sidebar .user-details {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .user-sidebar .user-details h3 {
+    margin-top: 0;
+    color: #333;
+  }
+
+</style>
+       <!-- User Sidebar -->
+<div class="user-sidebar" id="userSidebar">
+  <button class="close-btn" id="closeUserSidebar">&times;</button>
+  <div class="user-info">
+    <img src="" alt="User Avatar" class="user-avatar" id="sidebarUserImage">
+    <h2 id="sidebarUserName"></h2>
+    <p id="sidebarUserEmail"></p>
+    <p id="sidebarUserStatus"></p>
+  </div>
+  <div class="user-details">
+    <h3>Thông tin chi tiết</h3>
+    <p id="sidebarUserDetails"></p>
+  </div>
+</div>
         <form action="/search" method="post" class="form-inline my-2 my-lg-0 mb-4" id="searchForm" style="padding-bottom: 15px;">
           <input class="form-control " type="text" name="name" id="name" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success  my-sm-0 hidden" type="submit"></button>
@@ -15,7 +101,7 @@
               <% if(users.length > 0){ %>
                 <% for(let i = 0; i < users.length; i++){ %>
                   <li class="list-group-item list-group-item-light cursor-pointer user-list d-flex align-items-center" data-id="<%= users[i]['_id'] %>">
-                    <div class="user-status">
+                    <div class="user-status sidebarOwn">
                       <img src="/<%= users[i]['image'] %>" alt="<%= users[i]['name'] %>" class="user-image">
                       <span class="status-dot <%= users[i]['is_online'] == '1' ? 'online' : 'offline' %>" 
                             id="<%= users[i]['_id'] %>-dot" 
@@ -46,6 +132,8 @@
       </div>
     </div>
 
+
+   
     <!-- Delete Modal -->
     <div class="modal fade" id="deleteChatModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -94,5 +182,44 @@
         </div>
       </div>
     </div>
+    <script>
+      // Existing JavaScript code
     
+      document.addEventListener('DOMContentLoaded', function() {
+        const userSidebar = document.getElementById('userSidebar');
+        const closeUserSidebar = document.getElementById('closeUserSidebar');
+        const userListItems = document.querySelectorAll('.user-list');
+        const chatSection = document.querySelector('.chat-section').closest('.col-md-9');
+        userListItems.forEach(item => {
+          item.addEventListener('click', function() {
+            const userId = this.dataset.id;
+            openUserSidebar(userId);
+          });
+        });
+    
+        closeUserSidebar.addEventListener('click', function() {
+          userSidebar.classList.remove('open');
+          chatSection.classList.remove('sidebar-open');
+        });
+    
+        function openUserSidebar(userId) {
+          const userElement = document.querySelector(`.user-list[data-id="${userId}"]`);
+          if (userElement) {
+            const userName = userElement.querySelector('div:last-child').textContent.trim();
+            const userImage = userElement.querySelector('img').src;
+            const userStatus = userElement.querySelector('.status-dot').classList.contains('online') ? 'Online' : 'Offline';
+    
+            document.getElementById('sidebarUserImage').src = userImage;
+            document.getElementById('sidebarUserName').textContent = userName;
+            document.getElementById('sidebarUserStatus').textContent = userStatus;
+            
+            // Thêm thông tin chi tiết nếu có
+            document.getElementById('sidebarUserDetails').textContent = `Thông tin chi tiết về ${userName}`;
+    
+            userSidebar.classList.add('open');
+            chatSection.classList.add('sidebar-open');
+          }
+        }
+      });
+    </script>
 <%-include('layouts/footer.ejs') %>
