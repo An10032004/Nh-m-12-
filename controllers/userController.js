@@ -539,6 +539,26 @@ const contactPost = async (req, res) => {
 
 };
 
+const Comment = async (req, res) => {
+    const comment = req.body.commentContent
+    const postId =req.params.id
+    const userId = req.session.user._id
+    const userName = req.session.user.name
+   
+    try {
+
+        await Post.updateOne(
+            { _id: postId },
+            { $push: { comments: { content: comment, userName, userId } } }
+        );
+       
+        res.redirect(`/posts`); // Hoặc `/posts` nếu bạn muốn quay lại danh sách
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+};
+
 
 const Game = async (req, res) => {
     res.render('game')
@@ -575,4 +595,5 @@ module.exports = {
     contact,
     contactPost,
     Game,
+    Comment
 }

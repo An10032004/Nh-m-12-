@@ -1,51 +1,127 @@
 <%-include('layouts/header.ejs') %>
 	<style>
-		.single_content {
-    width: calc(33.33% - 20px); /* Điều chỉnh kích thước và khoảng cách */
-    margin: 10px;
-    box-sizing: border-box;
-    float: left;
-    height: 300px; /* Chiều cao cố định */
-	width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    background: #fff;
-    border: 1px solid #ddd;
-}
+		.post-card {
+			width: calc(33.33% - 20px);
+			/* Điều chỉnh kích thước và khoảng cách */
+			margin: 10px;
+			box-sizing: border-box;
+			float: left;
+			min-height: 300px;
+			/* Chiều cao cố định */
+			width: 300px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			overflow: hidden;
+			background: #fff;
+			border: 1px solid #ddd;
+		}
 
-.single_content img {
-    width: 100%;
-    height: 200px; /* Chiều cao cố định cho ảnh */
-    object-fit: cover; /* Đảm bảo ảnh không bị biến dạng */
-}
+		.post-card img {
+			width: 100%;
+			height: 200px;
+			/* Chiều cao cố định cho ảnh */
+			object-fit: cover;
+			/* Đảm bảo ảnh không bị biến dạng */
+		}
 
-.single_content_info {
-    padding: 10px;
-    flex-grow: 1;
-}
+		.single_content_info {
+			padding: 10px;
+			flex-grow: 1;
+		}
 
-.single_content_info h1 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
+		.single_content_info h1 {
+			font-size: 18px;
+			margin-bottom: 10px;
+		}
 
-.single_content_info p.author {
-    font-size: 14px;
-    color: #666;
-}
+		.single_content_info p.author {
+			font-size: 14px;
+			color: #666;
+		}
 
-.post-meta {
-    font-size: 12px;
-    color: #999;
-    display: flex;
-    justify-content: space-between;
-}
-.page-item{
-	margin: 0;
-}
+		.post-meta {
+			font-size: 12px;
+			color: #999;
+			display: flex;
+			justify-content: space-between;
+		}
 
+		.page-item {
+			margin: 0;
+		}
+		.post-card {
+			width: 600px;
+			min-height: 300px;
+			border: 1px solid #e0e0e0;
+			border-radius: 8px;
+			margin-bottom: 20px;
+			padding: 15px;
+			transition: box-shadow 0.3s ease;
+		}
+		
+		.post-card:hover {
+			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		}
+		
+		.post-actions {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 10px;
+		}
+		
+		.like-btn, .comment-btn {
+			background: none;
+			border: none;
+			cursor: pointer;
+			font-size: 16px;
+			display: flex;
+			align-items: center;
+			gap: 5px;
+		}
+		
+		.like-btn.active i {
+			color: red;
+		}
+		
+		.comments-section {
+			margin-top: 15px;
+			border-top: 1px solid #e0e0e0;
+			padding-top: 15px;
+		}
+		
+		.comment {
+			background-color: #f9f9f9;
+			border-radius: 4px;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+		
+		.comment-form {
+			margin-top: 15px;
+		}
+		
+		.comment-form textarea {
+			width: 100%;
+			height: 60px;
+			margin-bottom: 10px;
+			padding: 5px;
+			border: 1px solid #e0e0e0;
+			border-radius: 4px;
+		}
+		
+		.comment-form button {
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			padding: 10px 15px;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		
+		.comment-form button:hover {
+			background-color: #45a049;
+		}
 	</style>
 
 	<body>
@@ -54,216 +130,287 @@
 				<div class="logo floatleft">
 					<h1>Blog</h1>
 				</div>
-				
+
 			</div>
 		</div>
-		
-		<!--Clean template by WpFreeware.com-->
-		
-		<div class="fix content_area">
-			
-			<div class="fix top_add_bar">
-				
-			  </div>
 
-			 
-				
+		<!--Clean template by WpFreeware.com-->
+
+		<div class="fix content_area">
+
+			<div class="fix top_add_bar">
+
+			</div>
+
+
+
 			<div class="fix wrap content_wrapper">
 				<div class="fix content">
 					<div class="fix main_content floatleft">
-						<div class="fix single_content_wrapper">
-						
-				
-					<%
-					if(posts.length > 0){
-						for(let i = 0 ; i < posts.length;i++){
-							%>
-							<div class="fix single_content floatleft">
-							<img src='<%= posts[i]['image'] %>' alt=""/>
-							<div class="fix single_content_info">
-								<h1><%= posts[i]['title'] %></h1>
-								<p class="author"><%= posts[i]['content'] %></p>
-								<div class="fix post-meta">
-								<p> <%= moment(posts[i]['DateAt']).fromNow() %></p>
-									<p>Uploaded by <%= posts[i]['userName'] %></p>
-								</div>
-							</div>
-							
-						</div> 
-							
-							<%
-						}
-					}
-					
-		
-					
-						
-						%>
-						
-						
-						
-						
-						
-						
-						
+						<div class="">
+
+
+							<% if(posts.length > 0) { %>
+								<% for(let i = 0; i < posts.length; i++) { %>
+								  <div class="fix floatleft post-card" data-post-id="<%= i + 1 %>">
+									<img src='<%= posts[i]['image'] %>' alt=""/>
+									<div class="fix single_content_info">
+									  <h1><%= posts[i]['title'] %></h1>
+									  <p class="author"><%= posts[i]['content'] %></p>
+									  <div class="fix post-meta">
+										<p><%= moment(posts[i]['DateAt']).fromNow() %></p>
+										<p>Uploaded by <%= posts[i]['userName'] %></p>
+									  </div>
+									  <div class="post-actions">
+										<button class="like-btn" data-likes="5">
+										  <i class="fas fa-heart"></i> <span class="like-count">5</span>
+										</button>
+										<button class="comment-btn" data-comments="3">
+										  <i class="fas fa-comment"></i> <span class="comment-count">3</span>
+										</button>
+									  </div>
+									  <div class="comments-section" style="display: none;">
+										<h3>Comments</h3>
+										<% if (posts[i].comments.length > 0) { %>
+											<% for (let j = 0; j < posts[i].comments.length; j++) { %>
+												<div class="comment">
+													<p><strong><%= posts[i].comments[j].userName %>:</strong> <%= posts[i].comments[j].content %></p>
+												</div>
+											<% } %>
+										<% } else { %>
+											<p>No comments yet.</p>
+										<% } %>
+										
+										<form class="comment-form" action="/comments/<%=posts[i]['id'] %>" method="POST" enctype="multipart/form-data">
+										  <input type="hidden" name="postId" value="<%= i + 1 %>">
+										  <textarea id="commentContent" name="commentContent" placeholder="Add your comment..." required></textarea>
+										  <button type="submit" style="float:right">Send</button>
+										</form>
+										
+									  </div>
+									</div>
+								  </div>
+								<% } %>
+							  <% } %>
+							  
+							  <style>
+								
+							  </style>
+							  
+							  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+							  <script>
+							  document.addEventListener('DOMContentLoaded', function() {
+								const posts = document.querySelectorAll('.post-card');
+							  
+								posts.forEach(post => {
+								  const postId = post.dataset.postId;
+								  const likeBtn = post.querySelector('.like-btn');
+								  const commentBtn = post.querySelector('.comment-btn');
+								  const commentsSection = post.querySelector('.comments-section');
+								  const likeCount = likeBtn.querySelector('.like-count');
+								  const commentForm = post.querySelector('.comment-form');
+							  
+								  // Load liked state from localStorage
+								  const isLiked = localStorage.getItem(`post_${postId}_liked`) === 'true';
+								  if (isLiked) {
+									likeBtn.classList.add('active');
+								  }
+							  
+								 
+							  
+								  commentBtn.addEventListener('click', function() {
+									if (commentsSection.style.display === 'none') {
+									  commentsSection.style.display = 'block';
+									} else {
+									  commentsSection.style.display = 'none';
+									}
+								  });
+							  
+								  
+								});
+							  });
+							  </script>
+
+
+
+
+
+
+
 						</div>
-						
-						
+
+
 						<nav>
-    <ul class="pagination" style="float: left;">
-        <% if (pagination.current > 1) { %>
-            <li class="page-item">
-                <button class="page-link" data-pagination="1">First</button>
-            </li>
-            <li class="page-item">
-                <button class="page-link" data-pagination="<%= pagination.current- 1 %>">Trang trước</button>
-            </li>
-        <% } %>
+							<ul class="pagination" style="float: left;">
+								<% if (pagination.current> 1) { %>
+									<li class="page-item">
+										<button class="page-link" data-pagination="1">First</button>
+									</li>
+									<li class="page-item">
+										<button class="page-link" data-pagination="<%= pagination.current- 1 %>">Trang
+											trước</button>
+									</li>
+									<% } %>
 
-        <% for (var i = 1; i <= pagination.totalPages; i++) { %>
-            <li class="page-item <%= pagination.current == i ? 'active' : '' %>">
-                <button class="page-link" data-pagination="<%= i %>"><%= i %></button>
-            </li>
-        <% } %>
+										<% for (var i=1; i <=pagination.totalPages; i++) { %>
+											<li class="page-item <%= pagination.current == i ? 'active' : '' %>">
+												<button class="page-link" data-pagination="<%= i %>">
+													<%= i %>
+												</button>
+											</li>
+											<% } %>
 
-        <% if (pagination.current < pagination.totalPages) { %>
-            <li class="page-item">
-                <button class="page-link" data-pagination="<%= pagination.current + 1 %>">Trang kế</button>
-            </li>
-            <li class="page-item">
-                <button class="page-link" data-pagination="<%= pagination.totalPages %>">Last</button>
-            </li>
-        <% } %>
-    </ul>
-</nav>
+												<% if (pagination.current < pagination.totalPages) { %>
+													<li class="page-item">
+														<button class="page-link"
+															data-pagination="<%= pagination.current + 1 %>">Trang
+															kế</button>
+													</li>
+													<li class="page-item">
+														<button class="page-link"
+															data-pagination="<%= pagination.totalPages %>">Last</button>
+													</li>
+													<% } %>
+							</ul>
+						</nav>
 
-						
-						
-						
+
+
+
 						<script>
 							const buttonPagination = document.querySelectorAll("[data-pagination]")
 
-								if(buttonPagination){
-									let url = new URL(window.location.href)
-										buttonPagination.forEach(button => {
-											button.addEventListener("click",() => {
-												const page = button.getAttribute("data-pagination")
+							if (buttonPagination) {
+								let url = new URL(window.location.href)
+								buttonPagination.forEach(button => {
+									button.addEventListener("click", () => {
+										const page = button.getAttribute("data-pagination")
 
-												url.searchParams.set("page", page)
+										url.searchParams.set("page", page)
 
-												window.location.href = url.href
+										window.location.href = url.href
 									})
 								})
-								}
-							</script>
+							}
+						</script>
 
 
 					</div>
-					<div class="fix sidebar floatright">
+					<div class="fix sidebar floatright" style="min-height: 1000px;">
 						<div class="fix single_sidebar">
 							<div class="popular_post fix">
 								<h2>Popular</h2>
-								<%
-								if(posts.length > 0){
-									for(i = 0 ; i < posts.length;i++){
-										 if(posts[i]['popular'] === 'true'){
-											%>
-												<div class="fix single_popular">
-												<img src="<%= posts[i]['image'] %>" class="floatleft"/>
-												<h2><%= posts[i]['title']%></h2>
-												<p> <%= moment(posts[i]['DateAt']).fromNow() %></p>
-											</div>
+								<% if(posts.length> 0){
+									for(i = 0 ; i < posts.length;i++){ if(posts[i]['popular']==='true' ){ %>
+										<div class="fix single_popular">
+											<img src="<%= posts[i]['image'] %>" class="floatleft" />
+											<h2>
+												<%= posts[i]['title']%>
+											</h2>
+											<p>
+												<%= moment(posts[i]['DateAt']).fromNow() %>
+											</p>
+										</div>
 
-											<%
-										}
-										
-									}
-								}
-								
-								%>
+										<% } } } %>
 							</div>
 						</div>
 						<div class="fix single_sidebar">
-								<h2>Search</h2>
-								<input class="search" type="text" placeholder="Search and hit enter"/>
+							<h2>Search</h2>
+							<input class="search" type="text" placeholder="Search and hit enter" />
 						</div>
 						<div class="fix single_sidebar">
 							<h2>A little about me</h2>
-							<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Aenean lacinia bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum. Sed posuere consectetur est at mant lobortis. Sed posuere consectetur est lobortis. Fusce  mauris condimentum.</p>
+							<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Aenean lacinia
+								bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum. Sed
+								posuere consectetur est at mant lobortis. Sed posuere consectetur est lobortis. Fusce
+								mauris condimentum.</p>
 						</div>
-						
+
 					</div>
 				</div>
-				
-				
+
+
 			</div>
-			
-				<div class="fix bottom_add_bar">
-					<div class="addbar_leaderborard"><img src="http://placehold.it/728x90"/></div>
-				</div>
-				
+
+			<div class="fix bottom_add_bar">
+				<div class="addbar_leaderborard"></div>
+			</div>
+
 		</div>
-		
+
 		<!--Clean template by WpFreeware.com-->
-		
+
 		<div class="fix footer_top_area">
 			<div class="fix footer_top wrap">
-			<div class="fix footer_top_container">
-				<div class="fix single_footer floatleft">
-					<h2>From Twitter</h2>
-					<p>Aenean lacinia bibendum nulla sed consectetur. Donec sed odio dui. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id ultricies vehicula ut id elit. <br/><br/>Cum sociis natoque penatibus et magnis parturient montes, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis. </p>
-					<br/><p>Cum sociis natoque penatibus et magnis parturient montes, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.</p>
-				</div>
-				<div class="fix single_footer floatleft">
-					<h2>usefull links</h2>
-					<ul>
-						<li><a href="">Home</a></li>
-						<li><a href="">about us</a></li>
-						<li><a href="">privacy policy</a></li>
-						<li><a href="">contact us</a></li>
-					</ul>
-				</div>
-				<div class="fix single_footer floatleft">
-					<div class="popular_post fix">
-						<h2>Popular</h2>
-						<div class="fix single_popular">
-							<img src="images/popular.png" class="floatleft"/>
-							<a href=""><h2>Vestibum Malesuada Etiam Magna</h2></a>
-							<p>12 Nov, 2012</p>
-						</div>
-						<div class="fix single_popular">
-							<img src="images/popular.png" class="floatleft"/>
-							<a href=""><h2>Vestibum Malesuada Etiam Magna</h2></a>
-							<p>12 Nov, 2012</p>
-						</div>
-						<div class="fix single_popular">
-							<img src="images/popular.png" class="floatleft"/>
-							<a href=""><h2>Vestibum Malesuada Etiam Magna</h2></a>
-							<p>12 Nov, 2012</p>
+				<div class="fix footer_top_container">
+					<div class="fix single_footer floatleft">
+						<h2>From Twitter</h2>
+						<p>Aenean lacinia bibendum nulla sed consectetur. Donec sed odio dui. Donec id elit non mi porta
+							gravida at eget metus. Nullam id dolor id ultricies vehicula ut id elit. <br /><br />Cum
+							sociis natoque penatibus et magnis parturient montes, nascetur ridiculus mus. Aenean eu leo
+							quam. Pellentesque ornare sem lacinia quam venenatis.Aenean eu leo quam. Pellentesque ornare
+							sem lacinia quam venenatis. </p>
+						<br />
+						<p>Cum sociis natoque penatibus et magnis parturient montes, nascetur ridiculus mus. Aenean eu
+							leo quam. Pellentesque ornare sem lacinia quam venenatis.Aenean eu leo quam. Pellentesque
+							ornare sem lacinia quam venenatis.</p>
+					</div>
+					<div class="fix single_footer floatleft">
+						<h2>usefull links</h2>
+						<ul>
+							<li><a href="">Home</a></li>
+							<li><a href="">about us</a></li>
+							<li><a href="">privacy policy</a></li>
+							<li><a href="">contact us</a></li>
+						</ul>
+					</div>
+					<div class="fix single_footer floatleft">
+						<div class="popular_post fix">
+							<h2>Popular</h2>
+							<div class="fix single_popular">
+								<img src="images/popular.png" class="floatleft" />
+								<a href="">
+									<h2>Vestibum Malesuada Etiam Magna</h2>
+								</a>
+								<p>12 Nov, 2012</p>
+							</div>
+							<div class="fix single_popular">
+								<img src="images/popular.png" class="floatleft" />
+								<a href="">
+									<h2>Vestibum Malesuada Etiam Magna</h2>
+								</a>
+								<p>12 Nov, 2012</p>
+							</div>
+							<div class="fix single_popular">
+								<img src="images/popular.png" class="floatleft" />
+								<a href="">
+									<h2>Vestibum Malesuada Etiam Magna</h2>
+								</a>
+								<p>12 Nov, 2012</p>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 			</div>
 		</div>
 		<div class="fix footer_area">
 			<div class="wrap">
-			<div class="fix copyright_text floatleft">
-				<p>Designed By <a href="http://www.wpfreeware.com" rel="nofollow">WpFreeware</a></p>
-			</div>
-			<div class="fix social_area floatright">
-				<ul>
-					<li><a href="" class="feed"></a></li>
-					<li><a href="" class="facebook"></a></li>
-					<li><a href="" class="twitter"></a></li>
-					<li><a href="" class="drible"></a></li>
-					<li><a href="" class="flickr"></a></li>
-					<li><a href="" class="pin"></a></li>
-					<li><a href="" class="tumblr"></a></li>
-				</ul>
-			</div>
+				<div class="fix copyright_text floatleft">
+					<p>Designed By <a href="http://www.wpfreeware.com" rel="nofollow">WpFreeware</a></p>
+				</div>
+				<div class="fix social_area floatright">
+					<ul>
+						<li><a href="" class="feed"></a></li>
+						<li><a href="" class="facebook"></a></li>
+						<li><a href="" class="twitter"></a></li>
+						<li><a href="" class="drible"></a></li>
+						<li><a href="" class="flickr"></a></li>
+						<li><a href="" class="pin"></a></li>
+						<li><a href="" class="tumblr"></a></li>
+					</ul>
+				</div>
 			</div>
 		</div>
-		
-<%-include('layouts/footer.ejs') %>
-		
+
+		<%-include('layouts/footer.ejs') %>

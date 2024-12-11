@@ -1,5 +1,12 @@
 const mongoose = require('mongoose')
 
+const commentSchema = new mongoose.Schema({
+    content: { type: String, required: true }, // Nội dung comment
+    userName: { type: String, required: true }, // Tên người dùng bình luận
+    userId: { type: String, required: true }, // ID người dùng bình luận
+    DateAt: { type: Date, default: Date.now } // Thời gian bình luận
+}, { timestamps: true });
+
 const postSchema = new mongoose.Schema({
     userName:String,
     user_id_upload:{
@@ -19,7 +26,8 @@ const postSchema = new mongoose.Schema({
         required:true
     },
     popular:String,
-    DateAt: { type: Date, default: Date.now }
+    DateAt: { type: Date, default: Date.now },
+    comments: { type: [commentSchema], default: [] }
 
 },
     {timestamps:true}
