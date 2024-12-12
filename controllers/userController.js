@@ -339,6 +339,7 @@ const getPost = async (req,res) => {
     objpagination.totalPages = totalPages
     const posts = await Post.find({}).sort({DateAt:-1}).limit(objpagination.limit).skip(objpagination.skip)
 
+    
 
     res.render('post',{posts:posts,pagination:objpagination})
 }
@@ -558,7 +559,16 @@ const Comment = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
-
+const Like = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const post = await Post.findByIdAndUpdate(id, { $inc: { likes: 1 } }, { new: true });
+        res.redirect('/posts')
+    } catch (err) {
+        console.log(err);
+        
+    }
+};
 
 const Game = async (req, res) => {
     res.render('game')
@@ -595,5 +605,6 @@ module.exports = {
     contact,
     contactPost,
     Game,
-    Comment
+    Comment,
+    Like,
 }

@@ -27,8 +27,8 @@ const postSchema = new mongoose.Schema({
     },
     popular:String,
     DateAt: { type: Date, default: Date.now },
-    comments: { type: [commentSchema], default: [] }
-
+    comments: { type: [commentSchema], default: [] },
+    likes: { type: Number, default: 0 }
 },
     {timestamps:true}
 )

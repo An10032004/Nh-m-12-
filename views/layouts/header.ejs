@@ -318,12 +318,17 @@
           <p><%= user.email %></p>
         </div>
         <div class="user-posts">
-          <h3>Bài đăng</h3>
+          <h3>Posts</h3>
           <% post.forEach(function(p) { %>
-            <div class="post">
-              <h4><%= p.title %></h4>
+            
+              <% if(p.user_id_upload === user._id){%>
+                <div class="post">
+                <h4><%= p.title %></h4>
               <p><%= p.content %></p>
-            </div>
+               </div> <%}%>
+              
+              
+            
           <% }); %>
         </div>
       </div>

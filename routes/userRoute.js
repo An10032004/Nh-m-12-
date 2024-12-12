@@ -116,6 +116,7 @@ user_route.get('/game3',auth.isLogin,(req,res) => {
 
 //comments
 user_route.post('/comments/:id',upload.single('image'),auth.isLogin, userController.Comment); 
+user_route.post('/like/:id',upload.single('image'),auth.isLogin, userController.Like); 
 
 
 //api check PostMan
