@@ -121,6 +121,8 @@ user_route.post('/like/:id',upload.single('image'),auth.isLogin, userController.
 //friends
 user_route.get('/friend',upload.single('image'),auth.isLogin, userController.Friend)
 user_route.post('/addFriend/:id',upload.single('image'),auth.isLogin, userController.addFriend)
+user_route.post('/acceptFriend/:id',upload.single('image'),auth.isLogin, userController.acceptFriend)
+user_route.post('/removeFriend/:id',upload.single('image'),auth.isLogin, userController.removeFriend)
 
 //api check PostMan
 user_route.get('/testApi',userController.getApi)

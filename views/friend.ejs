@@ -133,16 +133,28 @@
                         <div class="friend-status"><%= friend.is_online == '1' ? 'online' : 'offline' %></div>
                     </div>
                     <div class="friend-actions">    
-                        
-           <%  const isFriend = friend.isFriend%>
-                        
-    <% if (isFriend) { %>
-        <button class="btn btn-remove" id="remove-btn-<%= friend._id %>">Hủy kết bạn</button>
-    <% } else { %>
-        <form action="/addFriend/<%= friend._id %>" method="POST">
-            <button type="submit" class="btn btn-add">Kết bạn</button>
-        </form> 
-    <% } %>
+                        <% if (friend.isFriendStatus === 'accepted') { %>
+                            <!-- Nếu đã kết bạn -->
+                            <form action="/removeFriend/<%= friend._id %>" method="POST">
+                                <button type="submit" class="btn btn-remove">Hủy kết bạn</button>
+                            </form>
+
+                        <% } else if (friend.isFriendStatus === 'pending') { %>
+                            <!-- Nếu kết bạn đang chờ xác nhận -->
+                            <form action="/acceptFriend/<%= friend._id %>" method="POST">
+                                <button type="submit" class="btn btn-accept">Chấp nhận kết bạn</button>
+                            </form>
+                        <% } else if (friend.isFriendStatus === 'sent') { %>
+                            <!-- Nếu đã gửi lời mời kết bạn -->
+                           
+                                <button type="submit" class="btn btn-remove">Đã gửi lời mời</button>
+                            
+                        <% } else { %>
+                            <!-- Nếu chưa kết bạn -->
+                            <form action="/addFriend/<%= friend._id %>" method="POST">
+                                <button type="submit" class="btn btn-add">Kết bạn</button>
+                            </form>
+                        <% } %>
                     </div>
                 </li>
             <% }); %>

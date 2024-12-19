@@ -580,11 +580,11 @@ const Friend = async (req, res) => {
 
     const usersWithFriendStatus = users.map(userItem => {
         // Kiểm tra xem userItem._id có nằm trong mảng user.friends
-        const isFriend = user.friends.some(friend => friend.ownId.toString() === userItem._id.toString());
+        const friendStatus = user.friends.find(friend => friend.ownId.toString() === userItem._id.toString());
 
         return {
             ...userItem.toObject(), // Chuyển đổi từ Mongoose document sang plain object
-            isFriend, // Thêm trường isFriend vào đối tượng userItem
+            isFriendStatus: friendStatus ? friendStatus.isFriend : 'not-friend' , // Thêm trường isFriend vào đối tượng userItem
         };
     });
 
@@ -596,26 +596,95 @@ const Friend = async (req, res) => {
 
 const addFriend = async (req, res) => {
     const friendId =req.params.id
-    const you = req.session.user._id
+    const yourId = req.session.user._id
 
     
     try {
         const friend = await User.findOne({_id:friendId})
        
         await User.updateOne(
-            { _id: you },
+            { _id: yourId },
             { $push: { friends: { 
                 ownId:friendId,
                 name:friend.name,
                 email:friend.email,
                 image:friend.image,
                 is_online:friend.is_online,
-                isFriend:'1',
+                isFriend:'sent',
                 deleted: friend.deleted,
+             } } }
+        );
+
+        const you = await User.findOne({_id:yourId})
+
+        await User.updateOne(
+            { _id: friendId },
+            { $push: { friends: { 
+                ownId:yourId,
+                name:you.name,
+                email:you.email,
+                image:you.image,
+                is_online:you.is_online,
+                isFriend:'pending',
+                deleted: you.deleted,
              } } }
         );
        
         res.redirect(`/friend`); // Hoặc `/posts` nếu bạn muốn quay lại danh sách
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+};
+
+const acceptFriend = async (req, res) => {
+    const userId = req.session.user._id;
+    const friendId = req.params.id;
+
+    try {
+        // Cập nhật trạng thái kết bạn thành 'accepted' cho cả hai người
+        await User.updateOne(
+            { _id: userId, 'friends.ownId': friendId },
+            { $set: { 'friends.$.isFriend': 'accepted' } }
+        );
+
+        await User.updateOne(
+            { _id: friendId, 'friends.ownId': userId },
+            { $set: { 'friends.$.isFriend': 'accepted' } }
+        );
+
+        res.redirect('/friend');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+};
+
+const removeFriend = async (req, res) => {
+    const friendId = req.params.id; // Lấy ID người bạn muốn xóa
+    const yourId = req.session.user._id; // Lấy ID người dùng hiện tại
+
+    try {
+        // Tìm người dùng hiện tại
+        const user = await User.findOne({ _id: yourId });
+
+        // Loại bỏ người bạn khỏi mảng friends của người dùng hiện tại
+        await User.updateOne(
+            { _id: yourId },
+            { $pull: { friends: { ownId: friendId } } }
+        );
+
+        // Tìm người bạn
+        const friend = await User.findOne({ _id: friendId });
+
+        // Loại bỏ người dùng khỏi mảng friends của người bạn
+        await User.updateOne(
+            { _id: friendId },
+            { $pull: { friends: { ownId: yourId } } }
+        );
+
+        // Chuyển hướng người dùng về danh sách bạn bè sau khi đã xóa
+        res.redirect('/friend');
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
@@ -660,5 +729,7 @@ module.exports = {
     Comment,
     Like,
     Friend,
-    addFriend
+    addFriend,
+    acceptFriend,
+    removeFriend
 }
