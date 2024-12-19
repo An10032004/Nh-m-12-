@@ -570,6 +570,58 @@ const Like = async (req, res) => {
     }
 };
 
+const Friend = async (req, res) => {
+    var users = await User.find({_id: {
+        $nin:[req.session.user._id],
+        
+    }})
+    const you = req.session.user._id
+    var user = await User.findOne({_id:you})
+
+    const usersWithFriendStatus = users.map(userItem => {
+        // Kiểm tra xem userItem._id có nằm trong mảng user.friends
+        const isFriend = user.friends.some(friend => friend.ownId.toString() === userItem._id.toString());
+
+        return {
+            ...userItem.toObject(), // Chuyển đổi từ Mongoose document sang plain object
+            isFriend, // Thêm trường isFriend vào đối tượng userItem
+        };
+    });
+
+    console.log(usersWithFriendStatus); // Kiểm tra thông tin
+
+
+    res.render('friend',{users:users,senderId:you,usersWithFriendStatus})
+};
+
+const addFriend = async (req, res) => {
+    const friendId =req.params.id
+    const you = req.session.user._id
+
+    
+    try {
+        const friend = await User.findOne({_id:friendId})
+       
+        await User.updateOne(
+            { _id: you },
+            { $push: { friends: { 
+                ownId:friendId,
+                name:friend.name,
+                email:friend.email,
+                image:friend.image,
+                is_online:friend.is_online,
+                isFriend:'1',
+                deleted: friend.deleted,
+             } } }
+        );
+       
+        res.redirect(`/friend`); // Hoặc `/posts` nếu bạn muốn quay lại danh sách
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+};
+
 const Game = async (req, res) => {
     res.render('game')
 };
@@ -607,4 +659,6 @@ module.exports = {
     Game,
     Comment,
     Like,
+    Friend,
+    addFriend
 }

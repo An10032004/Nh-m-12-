@@ -1,0 +1,154 @@
+<%-include('layouts/header.ejs') %>
+
+<style>
+    
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #1877f2;
+        margin-bottom: 20px;
+    }
+    .search-bar {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #dddfe2;
+        border-radius: 20px;
+        font-size: 16px;
+    }
+    .friend-list {
+        list-style-type: none;
+        padding: 0;
+    }
+    .friend-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #dddfe2;
+        transition: background-color 0.3s ease;
+    }
+    .friend-item:last-child {
+        border-bottom: none;
+    }
+    .friend-item:hover {
+        background-color: #f7f8fa;
+    }
+    .friend-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+        object-fit: cover;
+    }
+    .friend-info {
+        flex-grow: 1;
+    }
+    .friend-name {
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+    .friend-status {
+        font-size: 14px;
+        color: #65676b;
+    }
+    .friend-actions {
+        display: flex;
+        gap: 10px;
+    }
+    .btn {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+    .btn-add {
+        background-color: #1877f2;
+        color: white;
+    }
+    .btn-add:hover {
+        background-color: #166fe5;
+    }
+    .btn-remove {
+        background-color: #e4e6eb;
+        color: #1c1e21;
+    }
+    .btn-remove:hover {
+        background-color: #d8dadf;
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .page-btn {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border: 1px solid #dddfe2;
+        background-color: white;
+        color: #1877f2;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    .page-btn.active {
+        background-color: #1877f2;
+        color: white;
+    }
+    @media (max-width: 600px) {
+        .friend-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .friend-avatar {
+            margin-bottom: 10px;
+        }
+        .friend-actions {
+            margin-top: 10px;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Danh sách bạn bè</h1>
+        
+        <input type="text" class="search-bar" id="searchBar" placeholder="Tìm kiếm bạn bè...">
+    
+        <ul class="friend-list" id="friendList">
+           
+
+            <% usersWithFriendStatus.forEach(function(friend, index) { %>
+                <li class="friend-item">
+                    <img src="<%= friend.image %>" alt="<%= friend.name %>" class="friend-avatar">
+                    <div class="friend-info">
+                        <div class="friend-name"><%= friend.name %></div>
+                        <div class="friend-status"><%= friend.is_online == '1' ? 'online' : 'offline' %></div>
+                    </div>
+                    <div class="friend-actions">    
+                        
+           <%  const isFriend = friend.isFriend%>
+                        
+    <% if (isFriend) { %>
+        <button class="btn btn-remove" id="remove-btn-<%= friend._id %>">Hủy kết bạn</button>
+    <% } else { %>
+        <form action="/addFriend/<%= friend._id %>" method="POST">
+            <button type="submit" class="btn btn-add">Kết bạn</button>
+        </form> 
+    <% } %>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+
+  
+<%-include('layouts/footer.ejs') %>
+

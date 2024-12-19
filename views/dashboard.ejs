@@ -1,5 +1,7 @@
 <%-include('layouts/header.ejs') %>
 <link rel="stylesheet" href="/css/dashboard.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+
 <style>
   
   /* Existing styles */
@@ -75,7 +77,61 @@
     margin-top: 0;
     color: #333;
   }
+  .tooltip {
+    visibility: hidden; /* Ẩn mặc định */
+    transition: visibility 0s, opacity 0.3s linear; /* Hiệu ứng chuyển tiếp */
+}
 
+  .tooltip.shown{
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .box-typing{
+  position: relative;
+}
+
+.box-typing .inner-dots {
+  position: relative;
+  height: 20px;
+  width: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #efefef;
+  border-radius: 45px;
+  margin-top: 2px;
+}
+
+.box-typing .inner-dots span {
+  animation: blink 1.5s infinite;
+  height: 5px;
+  width: 5px;
+  background-color: #252525;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0px 3px;
+}
+
+.box-typing .inner-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.box-typing .inner-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%{
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.1;
+  }
+}
 </style>
        <!-- User Sidebar -->
 <div class="user-sidebar" id="userSidebar">
@@ -102,13 +158,13 @@
                 <% for(let i = 0; i < users.length; i++){ %>
                   <li class="list-group-item list-group-item-light cursor-pointer user-list d-flex align-items-center" data-id="<%= users[i]['_id'] %>">
                     <div class="user-status sidebarOwn">
-                      <img src="/<%= users[i]['image'] %>" alt="<%= users[i]['name'] %>" class="user-image">
+                      <img src="/<%= users[i]['image'] %>" alt="<%=users[i]['name'] %>" class="user-image">
                       <span class="status-dot <%= users[i]['is_online'] == '1' ? 'online' : 'offline' %>" 
                             id="<%= users[i]['_id'] %>-dot" 
                             aria-hidden="true"></span>
                     </div>
                     <div>
-                      <%= users[i]['name'] %>
+                      <%= users[i]['name'] %>  <div class="inner-list-typing"></div> 
                       <span class="sr-only" id="<%= users[i]['_id'] %>-status">
                         <%= users[i]['is_online'] == '1' ? 'Online' : 'Offline' %>
                       </span>
@@ -122,18 +178,28 @@
             <div class="chat-section">
               <div class="selected-user"></div>
               <div class="chat-container"></div>
+             
               <form action="" id="chat-form" method="POST" class="d-flex">
                 <input type="text" name="message" placeholder="Enter message" id="message" class="form-control flex-grow-1" required>
-                <input type="submit" value="Send" class="btn btn-primary">
+                <span class="button-icon btn btn-dark material-symbols-rounded" style="font-size: 20px;">
+                    sentiment_satisfied
+                </span>
+                <span type="button" id="file-upload" class="button-icon btn btn-dark material-symbols-rounded">attach_file</span>
+               <input type="submit" value="Send" class="btn btn-primary">
               </form>
+              <div class="tooltip" role="tooltip" >
+                <emoji-picker class="dark" style="top:0;right: 0;"></emoji-picker>
+              </div>
+             
             </div>
           </div>
+          
         </div>
+        
       </div>
     </div>
 
-
-   
+    
     <!-- Delete Modal -->
     <div class="modal fade" id="deleteChatModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -221,5 +287,7 @@
           }
         }
       });
+      //file
     </script>
+
 <%-include('layouts/footer.ejs') %>

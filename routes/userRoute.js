@@ -118,6 +118,9 @@ user_route.get('/game3',auth.isLogin,(req,res) => {
 user_route.post('/comments/:id',upload.single('image'),auth.isLogin, userController.Comment); 
 user_route.post('/like/:id',upload.single('image'),auth.isLogin, userController.Like); 
 
+//friends
+user_route.get('/friend',upload.single('image'),auth.isLogin, userController.Friend)
+user_route.post('/addFriend/:id',upload.single('image'),auth.isLogin, userController.addFriend)
 
 //api check PostMan
 user_route.get('/testApi',userController.getApi)

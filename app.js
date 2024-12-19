@@ -35,16 +35,16 @@ usp.on('connection',async function(socket){
     const userId = socket.handshake.auth.token
 
     await User.findByIdAndUpdate({_id:userId},{$set:{is_online:'1'}})
-
+    
     socket.broadcast.emit('getOnlineUser',{user_id:userId})
-
+    
     socket.on('disconnect',async function(){
         console.log('user disconnected')
 
         const userId = socket.handshake.auth.token
 
         await User.findByIdAndUpdate({_id:userId},{$set:{is_online:'0'}})
-
+        
 
         socket.broadcast.emit('getOfflineUser',{user_id:userId})
 
@@ -79,8 +79,8 @@ usp.on('connection',async function(socket){
 
     })
 
-
-
+    //friend
+    
 
     //games
     
@@ -112,11 +112,17 @@ usp.on('connection',async function(socket){
                 delete games[currentCode];
             }
         });
-
+        socket.on("CLIENT_SEND_TYPING", async (type) =>{
+            const user = await User.findOne({_id:socket.handshake.auth.token})
+            
+            socket.broadcast.emit('SERVER_RETURN_TYPING',{
+                userId:user._id,
+                fullName:user.name,
+                type:type,
+            })
+        })
        
-        
-        //tic toc
-        
+       
 })
 
 

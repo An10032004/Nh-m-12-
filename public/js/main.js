@@ -58,11 +58,12 @@ $(document).ready(function () {
                 <img src="${userImage}" alt="${userName}" class="user-image">
                 <span class="status-dot ${isOnline ? 'online' : 'offline'}" aria-hidden="true"></span>
             </div>
-            <span class="selected-user-name" style="margin-right:30px">${userName}</span>
+            <span class="selected-user-name" style="margin-right:30px">${userName}</span> <div class="inner-list-typing"></div>
             <span class="sr-only">${isOnline ? 'Online' : 'Offline'}</span>
         `);
 
         socket.emit('existsChat', { sender_id: sender_id, receiver_id: receiver_id })
+        
     })
 
 
@@ -105,6 +106,7 @@ $('#chat-form').submit(function (event) {
                             `
                 $('.chat-container').append(html)
                 socket.emit('newChat', response.data)
+               
                 scrollChat()
             } else {
                 alert(data.msg)
@@ -112,8 +114,74 @@ $('#chat-form').submit(function (event) {
         }
     })
 })
+
+import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
+const buttonIcon = document.querySelector(".button-icon");
+if (buttonIcon) {
+    const tooltip = document.querySelector('.tooltip')
+    Popper.createPopper(buttonIcon, tooltip);
+    buttonIcon.onclick = () => {
+        tooltip.classList.toggle('shown')
+    }
+}
+
+const emojiPicker = document.querySelector("emoji-picker")
+if (emojiPicker) {
+    const inputChat = document.querySelector("#message")
+    emojiPicker.addEventListener("emoji-click", event => {
+        const icon = event.detail.unicode
+        inputChat.value = inputChat.value + icon
+
+        socket.emit("CLIENT_SEND_TYPING", "show")
+        setTimeout(() => {
+            socket.emit("CLIENT_SEND_TYPING","hidden")
+        },3000)
+        })
+        
+    inputChat.addEventListener("keyup", () => {
+    socket.emit("CLIENT_SEND_TYPING", "show")
+        setTimeout(() => {
+            socket.emit("CLIENT_SEND_TYPING","hidden")
+        },3000)
+})
+    }
+
+
+//typing 
+const elementListTyping = document.querySelector(".inner-list-typing");
+socket.on("SERVER_RETURN_TYPING", (data) => {
+    if (data.type == "show") {
+        const existListTyping = elementListTyping.querySelector(`[user-id="${data.userId}"]`)
+
+        if (!existListTyping) {
+            const boxTyping = document.createElement("div")
+            boxTyping.classList.add("box-typing")
+            boxTyping.setAttribute("user-id", data.userId)
+            boxTyping.innerHTML = `
+            <div class="inner-name"></div>
+                <div class="inner-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+        `
+            elementListTyping.appendChild(boxTyping);
+        }else{
+            const boxRemove = elementListTyping.querySelector(`[user-id="${data.userId}"]`)
+            if(boxRemove){
+                elementListTyping.removeChild(boxRemove)
+            }
+        }
+
+
+    }
+})
+
 socket.on('loadNewChat', function (data) {
+    console.log(data.receiver_id)
+    console.log(sender_id)
     if (sender_id == data.receiver_id && receiver_id == data.sender_id) {
+        
         let html = `
                 <div class="distance-user-chat" id='`+ data.id + `'>
                     <h5 ><span> `+ data.message + ` </span> </h5>
@@ -148,6 +216,7 @@ socket.on('loadChats', function (data) {
 
         html += `
                  </h5>
+                    
                     </div>
                 
                 `
@@ -586,7 +655,7 @@ const sendMessageButton = document.querySelector('#send-message')
 const fileInput = document.querySelector('#file-input')
 const fileUploadWrapper = document.querySelector('.file-upload-wrapper')
 const fileCancelButton = document.querySelector('#file-cancel')
-API_KEY = "AIzaSyDUpcpahSGsKs43f5drxP29Ax287uMjnYE"
+const API_KEY = "AIzaSyBlVff7YQiqJEj__Otj4JJZ0209JCeiy5A"
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`
 const userdata = {
     message : null,
@@ -861,4 +930,4 @@ socket.on('gameOverDisconnect', function() {
 });
 
 
-//tic toc
+
