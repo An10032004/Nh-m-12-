@@ -90,7 +90,21 @@ const loadDashboard = async(req,res) => {
             
         }})
         
-        res.render('dashboard',{user:req.session.user,users:users})
+        const you = req.session.user._id
+        var user = await User.findOne({_id:you})
+    
+        const usersWithFriendStatus = users.map(userItem => {
+            // Kiểm tra xem userItem._id có nằm trong mảng user.friends
+            const friendStatus = user.friends.find(friend => friend.ownId.toString() === userItem._id.toString());
+    
+            return {
+                ...userItem.toObject(), // Chuyển đổi từ Mongoose document sang plain object
+                isFriendStatus: friendStatus ? friendStatus.isFriend : 'not-friend' , // Thêm trường isFriend vào đối tượng userItem
+            };
+        });
+       
+
+        res.render('dashboard',{user:req.session.user,users:usersWithFriendStatus})
 
     } catch (error) {
         console.log(error.message)
@@ -339,9 +353,9 @@ const getPost = async (req,res) => {
     objpagination.totalPages = totalPages
     const posts = await Post.find({}).sort({DateAt:-1}).limit(objpagination.limit).skip(objpagination.skip)
 
-    
+    const users = await User.find({})
 
-    res.render('post',{posts:posts,pagination:objpagination})
+    res.render('post',{posts:posts,pagination:objpagination,users:users})
 }
 
 const loadPost = async (req,res) => {
