@@ -1,0 +1,262 @@
+<%- include('layouts/header.ejs') %>
+<style>
+    :root {
+        --primary-color: #3498db;
+        --secondary-color: #2c3e50;
+        --background-color: #ecf0f1;
+        --text-color: #333;
+        --border-radius: 8px;
+        --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
+
+    header {
+        background-color: var(--primary-color);
+        color: white;
+        text-align: center;
+        padding: 1.5rem;
+        box-shadow: var(--box-shadow);
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 2.5rem;
+    }
+
+    main {
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .settings-nav {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 2rem;
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 0.5rem;
+    }
+
+    .settings-nav button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        border-radius: var(--border-radius);
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .settings-nav button:hover,
+    .settings-nav button.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .settings-section {
+        display: none;
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 2rem;
+    }
+
+    .settings-section.active {
+        display: block;
+        animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    form {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+    input, select {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+        display: inline;
+        width: auto;
+        margin-right: 0.5rem;
+    }
+
+    button[type="submit"] {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #2980b9;
+    }
+
+    footer {
+        background-color: var(--secondary-color);
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    @media (max-width: 600px) {
+        .settings-nav {
+            flex-direction: column;
+        }
+
+        .settings-nav button {
+            margin-bottom: 0.5rem;
+        }
+    }
+   
+</style>
+<link rel="stylesheet" href="/css/changemode.css">
+</head>
+
+<body>
+<header>
+    <h1>User Settings</h1>
+</header>
+
+<main>
+    <nav class="settings-nav">
+        <button onclick="showSection('password')" id="password-btn">Change Password</button>
+        <button onclick="showSection('privacy')" id="privacy-btn">Privacy</button>
+        <button onclick="showSection('language')" id="language-btn">Language</button>
+        <button onclick="showSection('theme')" id="theme-btn">Theme</button>
+    </nav>
+
+    <section id="password" class="settings-section">
+        <h2>Change Password</h2>
+        <% 
+    if(typeof message !== 'undefined'){
+        %>
+            <h4 style="color:red"><%= message %></h4>
+        <%
+    }
+%>
+        <form action="/setPassword" method="post" enctype="multipart/form-data">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="old-password">Old Password:</label>
+            <input type="password" id="oldpassword" name="oldpassword" required>
+
+            <label for="new-password">New Password:</label>
+            <input type="password" id="newpassword" name="newpassword" required>
+
+            <label for="confirm-password">Confirm New Password:</label>
+            <input type="password" id="confirmpassword" name="confirmpassword" required>
+
+            <button type="submit" >Change Password</button>
+        </form>
+    </section>
+
+    <section id="privacy" class="settings-section">
+        <h2>Privacy Settings</h2>
+        <form onsubmit="return false;">
+            <label>
+                <input type="checkbox" id="profile-visibility"> Make profile visible to public
+            </label>
+            <label>
+                <input type="checkbox" id="email-notifications"> Receive email notifications
+            </label>
+            <label>
+                <input type="checkbox" id="two-factor-auth"> Enable two-factor authentication
+            </label>
+            <button type="submit">Save Privacy Settings</button>
+        </form>
+    </section>
+
+    <section id="language" class="settings-section">
+        <h2>Language Settings</h2>
+        <form onsubmit="return false;">
+            <label for="language-select">Select Language:</label>
+            <select id="language-select">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+            </select>
+            <button type="submit">Save Language Settings</button>
+        </form>
+    </section>
+
+    <section id="theme" class="settings-section">
+        <h2>Theme Settings</h2>
+        <form onsubmit="return false;">
+            <label>
+                <input type="radio" name="theme" value="light" checked> Light Theme
+            </label>
+            <label>
+                <input type="radio" name="theme" value="dark"> Dark Theme
+            </label>
+            <button type="button" id="change-mode">Change Mode</button>
+                    </form>
+    </section>
+</main>
+
+<footer>
+    <p style="margin-left: -200px;">&copy; 2023 MyApp. All rights reserved.</p>
+</footer>
+
+<script>
+    function showSection(sectionId) {
+        // Hide all sections
+        const sections = document.querySelectorAll('.settings-section');
+        sections.forEach(section => section.classList.remove('active'));
+
+        // Remove active class from all buttons
+        const buttons = document.querySelectorAll('.settings-nav button');
+        buttons.forEach(button => button.classList.remove('active'));
+
+        // Show the selected section
+        const selectedSection = document.getElementById(sectionId);
+        selectedSection.classList.add('active');
+
+        // Add active class to the clicked button
+        const activeButton = document.getElementById(`${sectionId}-btn`);
+        activeButton.classList.add('active');
+    }
+
+    // Show the password section by default
+    showSection('password');
+    
+</script>
+ <script src="/js/changemode.js"></script>
+</body>
+<%- include('layouts/footer.ejs') %>

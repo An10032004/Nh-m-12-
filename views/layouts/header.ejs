@@ -20,6 +20,14 @@
   <script src="/js/chess-0.10.3.min.js"></script>
   </head>
   <body>
+    <link rel="stylesheet" href="/css/changemode.css">
+    <script>document.addEventListener("DOMContentLoaded", () => {
+      const body = document.body;
+      const currentMode = localStorage.getItem("mode") || "light-mode"; // Mặc định là light-mode
+  
+      // Áp dụng chế độ theme hiện tại cho body
+      body.classList.add(currentMode);
+  });</script>
 		<link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/chatbot.css">
     <style>
@@ -263,7 +271,8 @@
   animation: fadeIn 0.5s ease-out;
 }
   </style>
-		<div class="wrapper d-flex align-items-stretch " style="background-color: #3A3B3C">
+  
+		<div class="wrapper d-flex align-items-stretch " >
 			<nav id="sidebar" style="border-top-left-radius: 9%;border-top-right-radius: 9%;max-width: 113px;min-width: 136px;margin-top:0px">
 				<div class="custom-menu">
 					<button type="button" id="sidebarCollapse" class="btn btn-primary">
@@ -305,7 +314,9 @@
             <a href="/contact"><span class="fa fa-address-book mr-3"></span></a>
           </li>
          
-         
+          <li class="active">
+            <a href="/settings"><span class="fa fa-cog mr-3"></span></a>
+          </li>
          
           <li>
             <a href="/logout"><span class="fa fa-sign-out mr-3"></span> </a>
@@ -345,7 +356,7 @@
           <ul class="header-nav">
             <li><a href="/dashboard"><span class="fa fa-home"></span> Home</a></li>
             <li><a href="/dashboard"><span class="fa fa-envelope"></span> Messages</a></li>
-            <li><a href="#"><span class="fa fa-cog"></span> Settings</a></li>
+            <li><a href="/settings"><span class="fa fa-cog"></span> Settings</a></li>
           </ul>
           <div class="notification-icon">
             <i class="fa fa-bell" style="color:white"></i>
@@ -369,7 +380,7 @@
             <img src="<%= user.image %>" alt="<%= user.name %>">
             <div class="dropdown" id="userDropdown">
               <button class="dropdown-item open-btn" id="openBtn">Profile</button>
-               <div class="dropdown-item">Settings</div>
+               <div class="dropdown-item"><a href="/settings">Settings</a></div>
               <div class="dropdown-item"><a href="/logout">Logout</a></div>
             </div>
           </div>

@@ -11,6 +11,9 @@ const { MongoMissingCredentialsError } = require('mongodb')
 const { post } = require('../routes/userRoute')
 const mongoose = require('mongoose')
 const searchHelper = require("../helpers/search");
+const generate = require("../helpers/generate")
+const SendMail = require("../helpers/sendMail")
+const ForgotPass = require("../models/forgotPasswordModel")
 const registerload = async(req,res) => {
     try {
         res.render('register')
@@ -18,6 +21,8 @@ const registerload = async(req,res) => {
         console.log(error.message)
     }
 }
+
+
 
 const register = async(req,res) => {
     try {
@@ -705,6 +710,121 @@ const removeFriend = async (req, res) => {
     }
 };
 
+
+
+const Setting = async (req, res) => {
+   res.render('setting')
+};
+const SetPassword = async (req, res) => {
+    const email = req.body.email
+    const oldPassword = req.body.oldpassword
+    const newPassword = req.body.newpassword
+    const confirm = req.body.confirmpassword
+try{
+    
+
+    if (newPassword !== confirm) {
+        return res.render("setting",{ message: 'Mật khẩu xác nhận không khớp!' });
+    }
+
+    // 2. Tìm người dùng theo email
+    const user = await User.findOne({ email:email,password:oldPassword });
+    if (!user.email) {
+        return res.render("setting",{ message: 'Email không tồn tại!' });
+    }
+    if (!user.password) {
+        return res.render("setting",{ message: 'Password không tồn tại!' });
+    }
+
+    // 5. Cập nhật mật khẩu
+    await User.updateOne({ email }, { $set: { password: newPassword } });
+
+    res.render("setting",{ message: 'Đổi mật khẩu thành công!' });
+} catch (error) {
+    console.error(error);
+    res.render("setting",{ message: 'Đã xảy ra lỗi, vui lòng thử lại sau!' });
+}
+ };
+
+
+
+ const Forgot = async(req,res) => {
+    try {
+        res.render('forgot')
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const ForgotPost = async(req,res) => {
+   const email = req.body.email
+   const user = await User.findOne({email:email})
+
+   if(!user){
+    res.render("forgot",{message:"email không tồn tại"})
+   }
+
+   const objectPass = {
+    email:email,
+    otp:generate.generateRandomNumber(6),
+    expireAt:Date.now(),
+    
+   }
+
+   const forgotPass = new ForgotPass(objectPass)
+   await forgotPass.save()
+
+   const subject = "mã Otp xác minh Mật khẩu"
+    const html = ` mã otp của bạn là <b>${objectPass.otp}</b> . Thời hạn sử dụng 2p`
+    SendMail.sendMail(email,subject,html)
+
+   res.redirect(`otp?email=${email}`)
+}
+
+const Otp = async(req,res) => {
+    res.render('otp')
+}
+const OtpPost = async(req,res) => {
+    const email = req.body.email
+    const otp = req.body.otp
+
+    const result = await ForgotPass.findOne({
+        email:email,
+        otp:otp,
+    })
+
+    if(!result){
+        res.render('otp',{message:"OTP không hợp lệ"})
+    }
+
+    const userData = await User.findOne({
+        email:email,       
+    })
+    
+    if(userData){
+        req.session.user = userData
+        res.cookie('user',JSON.stringify(userData))
+        res.redirect('reset')
+    }
+}
+const Reset = async(req,res) => {
+    res.render('reset')
+}
+const ResetPass = async(req,res) => {
+   const newPass = req.body.newpassword
+   const confirm = req.body.confirmpassword
+    const token = req.session.user._id
+    if(newPass !== confirm){
+        res.render("otp",{message:"mật khẩu mới không khớp"})
+    }
+    await User.updateOne({
+        _id:token
+    },{
+        password:newPass
+    })
+
+    res.redirect('dashboard')
+}
 const Game = async (req, res) => {
     res.render('game')
 };
@@ -745,5 +865,13 @@ module.exports = {
     Friend,
     addFriend,
     acceptFriend,
-    removeFriend
+    removeFriend,
+    Setting,
+    SetPassword,
+    Forgot,
+    ForgotPost,
+    Otp,
+    OtpPost,
+    Reset,
+    ResetPass,
 }

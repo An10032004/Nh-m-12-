@@ -41,6 +41,15 @@ user_route.use(cookieParser())
 user_route.get('/register',auth.isLogout,userController.registerload)
 user_route.post('/register',upload.single('image'),userController.register)
 
+//forgot
+user_route.get('/forgot-password',userController.Forgot)
+user_route.post('/forgot-password-post',upload.single('image'),userController.ForgotPost)
+user_route.get('/otp',userController.Otp)
+user_route.post('/verify-otp',upload.single('image'),userController.OtpPost)
+user_route.get('/reset',userController.Reset)
+user_route.post('/reset-password',upload.single('image'),userController.ResetPass)
+
+
 user_route.get('/',auth.isLogout,userController.loadLogin)
 user_route.post('/',userController.login)
 
@@ -123,6 +132,11 @@ user_route.get('/friend',upload.single('image'),auth.isLogin, userController.Fri
 user_route.post('/addFriend/:id',upload.single('image'),auth.isLogin, userController.addFriend)
 user_route.post('/acceptFriend/:id',upload.single('image'),auth.isLogin, userController.acceptFriend)
 user_route.post('/removeFriend/:id',upload.single('image'),auth.isLogin, userController.removeFriend)
+
+
+//setting
+user_route.get('/settings',upload.single('image'),auth.isLogin, userController.Setting)
+user_route.post('/setPassword',upload.single('image'),auth.isLogin, userController.SetPassword)
 
 //api check PostMan
 user_route.get('/testApi',userController.getApi)

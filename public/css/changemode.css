@@ -1,0 +1,27 @@
+/* Light mode */
+body.light-mode {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --background-color: #ecf0f1;
+    --text-color: #333;
+}
+
+body.light-mode .wrapper {
+    background-color: #ecf0f1;
+    color: #333;
+}
+
+/* Dark mode */
+body.dark-mode {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --background-color: #1e272e;
+}
+
+body.dark-mode .wrapper {
+    background-color: #1e272e;
+}
+
+/* .wrapper{
+    background-color: #3A3B3C;
+} */
